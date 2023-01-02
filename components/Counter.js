@@ -31,6 +31,7 @@ const CounterStyled = styled.div`
   align-items: center;
   p {
     color: hsl(238, 40%, 52%);
+    padding: 0.5rem !important;
   }
 
   button {
