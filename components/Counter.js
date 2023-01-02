@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 import { useState } from 'react';
 
-export default function Counter() {
-  const [count, setCount] = useState(0);
+export default function Counter({ score }) {
+  const [count, setCount] = useState(score);
 
   function adjustCount(amount) {
     setCount((current) => {
@@ -31,7 +31,7 @@ const CounterStyled = styled.div`
   align-items: center;
   p {
     color: hsl(238, 40%, 52%);
-    padding: 0.5rem !important;
+    padding: 0.5rem;
   }
 
   button {

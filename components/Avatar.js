@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export default function Avatar({ size, user }) {
+export default function Avatar({ size, avatar }) {
   const users = {
     ar: 'amyrobson',
     ju: 'juliusomo',
@@ -9,17 +9,14 @@ export default function Avatar({ size, user }) {
   };
 
   const sizes = {
+    xsmall: '25px',
     small: '45px',
     medium: '55px',
   };
 
   return (
     <>
-      <AvatarStyled
-        src={`/images/avatars/image-${users[user]}.png`}
-        alt="avatar"
-        size={sizes[size]}
-      />
+      <AvatarStyled src={avatar} alt="avatar" size={sizes[size]} />
     </>
   );
 }

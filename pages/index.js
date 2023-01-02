@@ -1,29 +1,21 @@
 import Head from 'next/head';
 // import styles from '../styles/Home.module.css'
 import styled from 'styled-components';
-import Avatar from '../components/Avatar';
-import Counter from '../components/Counter';
+import Comments from '../components/Comments';
+import MainCard from '../components/MainCard';
 
 export default function Home() {
   return (
-    <Wrapper>
-      <Counter />
-      <Avatar size="small" user="ju" />
-    </Wrapper>
+    <>
+      <Wrapper>
+        <Comments />
+      </Wrapper>
+    </>
   );
 }
 
 const Wrapper = styled.div`
   display: flex;
-
-  *,
-  p {
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-  }
-
-  h1 {
-    color: red;
-  }
+  flex-direction: column;
+  padding: 1rem;
 `;
