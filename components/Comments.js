@@ -19,7 +19,8 @@ export default function Comments() {
             avatar={comment.user.image.png}
             createdAt={comment.createdAt}
           />
-          <Replies replies={comment.replies} />
+
+          {comment.replies.length > 0 && <Replies replies={comment.replies} />}
         </>
       ))}
     </>
