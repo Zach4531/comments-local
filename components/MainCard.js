@@ -29,10 +29,10 @@ const MainCardStyled = styled.div`
   display: flex;
   align-items: flex-start;
   padding: 1.2rem;
-  margin: 1rem;
   border-radius: 0.5rem;
+  margin-left: auto;
   background-color: white;
-  width: 650px;
+  width: 100%;
 `;
 
 const CardContentStyled = styled.div`

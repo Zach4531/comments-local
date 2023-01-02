@@ -17,5 +17,9 @@ export default function Home() {
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: flex-end;
   padding: 1rem;
+  width: 650px;
+  margin: 1rem auto;
+  gap: 1.5rem;
 `;
