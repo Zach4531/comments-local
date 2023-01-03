@@ -2,6 +2,20 @@ import styled from 'styled-components';
 import Avatar from './Avatar';
 
 export default function AddComment() {
+  const newComment = {
+    id: Math.floor(Math.random() * 100) + 5,
+    content: '',
+    createdAt: new Date(),
+    score: 0,
+    username: 'juliusomo',
+    currentUser: true,
+    replies: [],
+  };
+
+  function addComment() {
+    alert('added');
+  }
+
   return (
     <AddCommentStyled>
       <Avatar size="medium" avatar={'./images/avatars/image-juliusomo.png'} />
@@ -11,7 +25,9 @@ export default function AddComment() {
         rows="5"
         placeholder="Add a Comment..."
       ></CommentTextareaStyled>
-      <CommentSubmitStyled type="submit">Submit</CommentSubmitStyled>
+      <CommentSubmitStyled type="submit" onClick={addComment}>
+        Submit
+      </CommentSubmitStyled>
     </AddCommentStyled>
   );
 }

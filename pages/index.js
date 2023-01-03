@@ -1,20 +1,26 @@
 import Head from 'next/head';
 // import styles from '../styles/Home.module.css'
 import { useState } from 'react';
+import data from '../public/data.json';
 
 import styled from 'styled-components';
 import AddComment from '../components/AddComment';
-import Comments from '../components/Comments';
 import MainCard from '../components/MainCard';
+import Replies from '../components/Replies';
 
 export default function Home() {
+  const [comments, setComments] = useState(data.comments);
+
   return (
-    <>
-      <Wrapper>
-        <Comments />
-        <AddComment />
-      </Wrapper>
-    </>
+    <Wrapper>
+      {comments.map((comment) => (
+        <>
+          <MainCard key={comment.id} commentData={comment} />
+          {comment.replies.length > 0 && <Replies replies={comment.replies} />}
+        </>
+      ))}
+      <AddComment />
+    </Wrapper>
   );
 }
 
