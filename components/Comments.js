@@ -11,15 +11,7 @@ export default function Comments() {
     <>
       {comments.map((comment) => (
         <>
-          <MainCard
-            key={comment.id}
-            content={comment.content}
-            score={comment.score}
-            username={comment.user.username}
-            avatar={comment.user.image.png}
-            createdAt={comment.createdAt}
-          />
-
+          <MainCard key={comment.id} commentData={comment} />
           {comment.replies.length > 0 && <Replies replies={comment.replies} />}
         </>
       ))}

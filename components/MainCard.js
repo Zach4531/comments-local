@@ -1,25 +1,20 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 import CardHeader from './Card/CardHeader';
 import Counter from './Counter';
 
-export default function MainCard({
-  score,
-  avatar,
-  username,
-  createdAt,
-  content,
-}) {
+export default function MainCard({ commentData }) {
   return (
     <MainCardStyled>
-      <Counter score={score} />
+      <Counter score={commentData.score} />
       <CardContentStyled>
         <CardHeader
           size="xsmall"
-          username={username}
-          avatar={avatar}
-          createdAt={createdAt}
+          username={commentData.user.username}
+          avatar={commentData.user.image.png}
+          createdAt={commentData.createdAt}
         />
-        <CardBodyStyled>{content}</CardBodyStyled>
+        <CardBodyStyled>{commentData.content}</CardBodyStyled>
       </CardContentStyled>
     </MainCardStyled>
   );

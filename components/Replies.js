@@ -10,14 +10,7 @@ export default function Replies({ replies }) {
   return (
     <ReplyContainerStyled>
       {comments.map((reply) => (
-        <MainCard
-          key={reply.id}
-          content={reply.content}
-          score={reply.score}
-          username={reply.user.username}
-          avatar={reply.user.image.png}
-          createdAt={reply.createdAt}
-        />
+        <MainCard key={reply.id} commentData={reply} />
       ))}
     </ReplyContainerStyled>
   );
