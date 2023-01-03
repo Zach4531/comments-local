@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import Avatar from '../Avatar';
 import Reply from '../../public/images/icon-reply.svg';
 
-export default function CardHeader({ username, avatar, createdAt, size }) {
+export default function CardHeader({ username, avatar, createdAt }) {
   return (
     <CardHeaderStyled>
       <CardUserStyled>

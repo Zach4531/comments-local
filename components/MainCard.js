@@ -10,8 +10,8 @@ export default function MainCard({ commentData }) {
       <CardContentStyled>
         <CardHeader
           size="xsmall"
-          username={commentData.user.username}
-          avatar={commentData.user.image.png}
+          username={commentData.username}
+          avatar={`./images/avatars/image-${commentData.username}.png`}
           createdAt={commentData.createdAt}
         />
         <CardBodyStyled>{commentData.content}</CardBodyStyled>

@@ -1,19 +1,27 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 import Avatar from './Avatar';
 
-export default function AddComment() {
+export default function AddComment({ addComment }) {
+  const [content, setContent] = useState('');
+
   const newComment = {
     id: Math.floor(Math.random() * 100) + 5,
-    content: '',
-    createdAt: new Date(),
+    content: content,
+    createdAt: '3 weeks ago',
     score: 0,
     username: 'juliusomo',
     currentUser: true,
     replies: [],
   };
 
-  function addComment() {
-    alert('added');
+  function handleClick() {
+    addComment(newComment);
+    setContent('');
+  }
+
+  function handleChange(event) {
+    setContent(event.target.value);
   }
 
   return (
@@ -24,8 +32,10 @@ export default function AddComment() {
         id="comment"
         rows="5"
         placeholder="Add a Comment..."
+        value={content}
+        onChange={handleChange}
       ></CommentTextareaStyled>
-      <CommentSubmitStyled type="submit" onClick={addComment}>
+      <CommentSubmitStyled type="submit" onClick={handleClick}>
         Submit
       </CommentSubmitStyled>
     </AddCommentStyled>

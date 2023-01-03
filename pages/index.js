@@ -11,15 +11,20 @@ import Replies from '../components/Replies';
 export default function Home() {
   const [comments, setComments] = useState(data.comments);
 
+  function addComment(newComment) {
+    const commentsUpdated = [...comments, newComment];
+    setComments(commentsUpdated);
+  }
+
   return (
     <Wrapper>
       {comments.map((comment) => (
         <>
           <MainCard key={comment.id} commentData={comment} />
-          {comment.replies.length > 0 && <Replies replies={comment.replies} />}
+          {/* {comment.replies.length > 0 && <Replies replies={comment.replies} />} */}
         </>
       ))}
-      <AddComment />
+      <AddComment addComment={addComment} />
     </Wrapper>
   );
 }
