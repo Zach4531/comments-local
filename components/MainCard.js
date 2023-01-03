@@ -1,22 +1,33 @@
 import { useState } from 'react';
 import styled from 'styled-components';
+import AddReply from './AddReply';
 import CardHeader from './Card/CardHeader';
 import Counter from './Counter';
 
 export default function MainCard({ commentData }) {
+  const [replyOpen, setReplyOpen] = useState(false);
+
+  function toggleReply() {
+    setReplyOpen(!replyOpen);
+  }
+
   return (
-    <MainCardStyled>
-      <Counter score={commentData.score} />
-      <CardContentStyled>
-        <CardHeader
-          size="xsmall"
-          username={commentData.username}
-          avatar={`./images/avatars/image-${commentData.username}.png`}
-          createdAt={commentData.createdAt}
-        />
-        <CardBodyStyled>{commentData.content}</CardBodyStyled>
-      </CardContentStyled>
-    </MainCardStyled>
+    <>
+      <MainCardStyled>
+        <Counter score={commentData.score} />
+        <CardContentStyled>
+          <CardHeader
+            size="xsmall"
+            username={commentData.username}
+            avatar={`./images/avatars/image-${commentData.username}.png`}
+            createdAt={commentData.createdAt}
+            toggleReply={toggleReply}
+          />
+          <CardBodyStyled>{commentData.content}</CardBodyStyled>
+        </CardContentStyled>
+      </MainCardStyled>
+      {replyOpen && <AddReply />}
+    </>
   );
 }
 

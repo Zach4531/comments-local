@@ -16,12 +16,16 @@ export default function Home() {
     setComments(commentsUpdated);
   }
 
+  function addReply(newReply) {}
+
   return (
     <Wrapper>
       {comments.map((comment) => (
         <>
           <MainCard key={comment.id} commentData={comment} />
-          {/* {comment.replies.length > 0 && <Replies replies={comment.replies} />} */}
+          {comment.replies.length > 0 && (
+            <Replies replies={comment.replies} addReply={addReply} />
+          )}
         </>
       ))}
       <AddComment addComment={addComment} />

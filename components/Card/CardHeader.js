@@ -2,7 +2,16 @@ import styled from 'styled-components';
 import Avatar from '../Avatar';
 import Reply from '../../public/images/icon-reply.svg';
 
-export default function CardHeader({ username, avatar, createdAt }) {
+export default function CardHeader({
+  username,
+  avatar,
+  createdAt,
+  toggleReply,
+}) {
+  function handleClick() {
+    toggleReply();
+  }
+
   return (
     <CardHeaderStyled>
       <CardUserStyled>
@@ -10,7 +19,7 @@ export default function CardHeader({ username, avatar, createdAt }) {
         <p className="username">{username}</p>
         <p className="date">{createdAt}</p>
       </CardUserStyled>
-      <span className="reply">
+      <span className="reply" onClick={handleClick}>
         <Reply />
         Reply
       </span>
