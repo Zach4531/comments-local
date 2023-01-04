@@ -4,6 +4,7 @@ import Avatar from './Avatar';
 
 export default function CommentForm({ type = 'submit', onSubmission, id }) {
   const [content, setContent] = useState('');
+  const [error, setError] = useState(false);
 
   const newComment = {
     id: Math.floor(Math.random() * 100) + 5,
@@ -16,8 +17,14 @@ export default function CommentForm({ type = 'submit', onSubmission, id }) {
   };
 
   function handleClick() {
-    onSubmission(newComment);
+    if (content !== '' && content !== ' ') {
+      onSubmission(newComment);
+    } else {
+      setError(true);
+      return false;
+    }
     setContent('');
+    setError(false);
   }
 
   function handleChange(event) {
@@ -25,20 +32,26 @@ export default function CommentForm({ type = 'submit', onSubmission, id }) {
   }
 
   return (
-    <FormStyled>
-      <Avatar size="medium" avatar={'./images/avatars/image-juliusomo.png'} />
-      <TextareaStyled
-        name={`comment_name_${id}`}
-        id={`comment_${id}`}
-        rows="5"
-        placeholder={`Add a ${type === 'reply' ? 'Reply' : 'Comment'}...`}
-        value={content}
-        onChange={handleChange}
-      ></TextareaStyled>
-      <ButtonStyled type="submit" onClick={handleClick}>
-        {type === 'reply' ? 'Reply' : 'Submit'}
-      </ButtonStyled>
-    </FormStyled>
+    <>
+      <FormStyled>
+        <Avatar size="medium" avatar={'./images/avatars/image-juliusomo.png'} />
+        <TextareaStyled
+          name={`comment_name_${id}`}
+          id={`comment_${id}`}
+          rows="5"
+          placeholder={`Add a ${type === 'reply' ? 'Reply' : 'Comment'}...`}
+          value={content}
+          onChange={handleChange}
+          error={error}
+        ></TextareaStyled>
+        <ButtonStyled type="submit" onClick={handleClick}>
+          {type === 'reply' ? 'Reply' : 'Submit'}
+        </ButtonStyled>
+      </FormStyled>
+      {error && (
+        <ErrorStyled error={error}>Comment cannot be empty</ErrorStyled>
+      )}
+    </>
   );
 }
 
@@ -64,4 +77,15 @@ const TextareaStyled = styled.textarea`
   flex: 1;
   border-radius: 0.5rem;
   padding: 1rem;
+  border: 2px solid ${(props) => (props.error ? 'red' : '#ccc')};
+`;
+
+const ErrorStyled = styled.p`
+  padding: 1rem;
+  background: red;
+  color: white;
+  font-weight: bold;
+  width: 100%;
+  border-radius: 0.5rem;
+  text-align: center;
 `;
