@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import styled from 'styled-components';
-import AddReply from './AddReply';
-import CardHeader from './Card/CardHeader';
+import CommentForm from './CommentForm';
+import CommentHeader from './Card/CommentHeader';
++65;
 import Counter from './Counter';
 
-export default function MainCard({ commentData }) {
+export default function Comment({ commentData }) {
   const [replyOpen, setReplyOpen] = useState(false);
 
   function toggleReply() {
@@ -13,25 +14,25 @@ export default function MainCard({ commentData }) {
 
   return (
     <>
-      <MainCardStyled>
+      <CommentStyled>
         <Counter score={commentData.score} />
-        <CardContentStyled>
-          <CardHeader
+        <CommentContentStyled>
+          <CommentHeader
             size="xsmall"
             username={commentData.username}
             avatar={`./images/avatars/image-${commentData.username}.png`}
             createdAt={commentData.createdAt}
             toggleReply={toggleReply}
           />
-          <CardBodyStyled>{commentData.content}</CardBodyStyled>
-        </CardContentStyled>
-      </MainCardStyled>
-      {replyOpen && <AddReply />}
+          <CommentBodyStyled>{commentData.content}</CommentBodyStyled>
+        </CommentContentStyled>
+      </CommentStyled>
+      {replyOpen && <CommentForm type="reply" />}
     </>
   );
 }
 
-const MainCardStyled = styled.div`
+const CommentStyled = styled.div`
   display: flex;
   align-items: flex-start;
   padding: 1.2rem;
@@ -41,7 +42,7 @@ const MainCardStyled = styled.div`
   width: 100%;
 `;
 
-const CardContentStyled = styled.div`
+const CommentContentStyled = styled.div`
   display: flex;
   flex-direction: column;
   font-size: 0.9rem;
@@ -49,7 +50,7 @@ const CardContentStyled = styled.div`
   padding-left: 1.5rem;
 `;
 
-const CardBodyStyled = styled.p`
+const CommentBodyStyled = styled.p`
   opacity: 0.7;
   padding-top: 1rem;
 `;

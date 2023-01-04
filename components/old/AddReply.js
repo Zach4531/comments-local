@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import styled from 'styled-components';
-import Avatar from './Avatar';
+import Avatar from '../Avatar';
 
 export default function AddReply({ addReply }) {
   const [content, setContent] = useState('');

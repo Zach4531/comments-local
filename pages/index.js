@@ -4,9 +4,9 @@ import { useState } from 'react';
 import data from '../public/data.json';
 
 import styled from 'styled-components';
-import AddComment from '../components/AddComment';
-import MainCard from '../components/MainCard';
 import Replies from '../components/Replies';
+import CommentForm from '../components/CommentForm';
+import Comment from '../components/Comment';
 
 export default function Home() {
   const [comments, setComments] = useState(data.comments);
@@ -22,13 +22,13 @@ export default function Home() {
     <Wrapper>
       {comments.map((comment) => (
         <>
-          <MainCard key={comment.id} commentData={comment} />
+          <Comment key={comment.id} commentData={comment} />
           {comment.replies.length > 0 && (
             <Replies replies={comment.replies} addReply={addReply} />
           )}
         </>
       ))}
-      <AddComment addComment={addComment} />
+      <CommentForm onSubmission={addComment} />
     </Wrapper>
   );
 }

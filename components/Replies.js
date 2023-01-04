@@ -1,16 +1,14 @@
 import { useState } from 'react';
 
 import styled from 'styled-components';
-import CardHeader from './Card/CardHeader';
-import Counter from './Counter';
-import MainCard from './MainCard';
+import Comment from './Comment';
 
 export default function Replies({ replies }) {
   const [comments, setComments] = useState(replies);
   return (
     <ReplyContainerStyled>
       {comments.map((reply) => (
-        <MainCard key={reply.id} commentData={reply} />
+        <Comment key={reply.id} commentData={reply} />
       ))}
     </ReplyContainerStyled>
   );
