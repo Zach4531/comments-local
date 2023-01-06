@@ -3,18 +3,19 @@ import Head from 'next/head';
 import { useState, createContext, useEffect } from 'react';
 import data from '../public/data.json';
 
+import { UserContext, CommentContext } from './context/Contexts';
+
 import styled from 'styled-components';
 import Replies from '../components/Replies';
 import CommentForm from '../components/CommentForm';
 import Comment from '../components/Comment';
 
-const CommentContext = createContext(null);
-
-export { CommentContext };
-
 export default function Home() {
+  const [user, setUser] = useState(data.currentUser);
   const [comments, setComments] = useState(data.comments);
   const [comment, setComment] = useState(null);
+
+  console.log(user);
 
   useEffect(() => {
     if (comment) {
@@ -44,19 +45,21 @@ export default function Home() {
   }
 
   return (
-    <CommentContext.Provider value={[comment, setComment]}>
-      <Wrapper>
-        {comments.map((comment) => (
-          <>
-            <Comment key={comment.id} commentData={comment} />
-            {comment.replies.length > 0 && (
-              <Replies replies={comment.replies} />
-            )}
-          </>
-        ))}
-        <CommentForm />
-      </Wrapper>
-    </CommentContext.Provider>
+    <UserContext.Provider value={[user, setUser]}>
+      <CommentContext.Provider value={[comment, setComment]}>
+        <Wrapper>
+          {comments.map((comment) => (
+            <>
+              <Comment key={comment.id} commentData={comment} />
+              {comment.replies.length > 0 && (
+                <Replies replies={comment.replies} />
+              )}
+            </>
+          ))}
+          <CommentForm />
+        </Wrapper>
+      </CommentContext.Provider>
+    </UserContext.Provider>
   );
 }
 

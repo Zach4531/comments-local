@@ -1,6 +1,6 @@
 import { useState, useContext } from 'react';
 import styled from 'styled-components';
-import { CommentContext } from '../pages';
+import { CommentContext } from '../pages/context/Contexts';
 import Avatar from './Avatar';
 
 export default function CommentForm({ type = 'submit', id, toggleReply }) {
