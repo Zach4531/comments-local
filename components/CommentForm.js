@@ -1,30 +1,40 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import styled from 'styled-components';
+import { CommentContext } from '../pages';
 import Avatar from './Avatar';
 
-export default function CommentForm({ type = 'submit', onSubmission, id }) {
+export default function CommentForm({ type = 'submit', id, toggleReply }) {
+  const [, setComment] = useContext(CommentContext);
+
   const [content, setContent] = useState('');
   const [error, setError] = useState(false);
 
-  const newComment = {
-    id: Math.floor(Math.random() * 100) + 5,
-    content: content,
-    createdAt: '3 weeks ago',
-    score: 0,
-    username: 'juliusomo',
-    currentUser: true,
-    replies: [],
-  };
+  const newComment = [
+    {
+      id: Math.floor(Math.random() * 100) + 5,
+      content: content,
+      createdAt: '3 weeks ago',
+      score: 0,
+      username: 'juliusomo',
+      currentUser: true,
+      replies: [],
+    },
+    { comment_id: id, comment_type: type },
+  ];
 
   function handleClick() {
-    if (content !== '' && content !== ' ') {
-      onSubmission(newComment);
-    } else {
+    if (content.trim() === '') {
       setError(true);
-      return false;
+      return;
     }
+
+    setComment(newComment);
     setContent('');
     setError(false);
+
+    if (type === 'reply') {
+      toggleReply();
+    }
   }
 
   function handleChange(event) {

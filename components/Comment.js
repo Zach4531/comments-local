@@ -27,7 +27,13 @@ export default function Comment({ commentData }) {
           <CommentBodyStyled>{commentData.content}</CommentBodyStyled>
         </CommentContentStyled>
       </CommentStyled>
-      {/* {replyOpen && <CommentForm type="reply" />} */}
+      {replyOpen && (
+        <CommentForm
+          type="reply"
+          id={commentData.id}
+          toggleReply={toggleReply}
+        />
+      )}
     </>
   );
 }
