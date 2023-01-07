@@ -81,6 +81,10 @@ const ButtonStyled = styled.button`
   border: 0;
   padding: 1rem;
   border-radius: 0.5rem;
+  transition: opacity 0.2s ease;
+  &:hover {
+    opacity: 0.5;
+  }
 `;
 
 const TextareaStyled = styled.textarea`

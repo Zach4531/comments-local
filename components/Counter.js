@@ -37,14 +37,16 @@ const CounterStyled = styled.div`
   button {
     font-size: 1.2rem;
     color: hsl(239, 57%, 85%);
+    font-weight: bold;
     cursor: pointer;
     width: 100%;
     background: none;
     border: 0;
     padding: 0.2rem 0rem;
-    transition: background-color 0.2s ease;
+    transition: all 0.2s ease;
     &:hover {
       background-color: hsl(239, 67%, 97%);
+      color: hsl(238, 40%, 52%);
     }
   }
 `;

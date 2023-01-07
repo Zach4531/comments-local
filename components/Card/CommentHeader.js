@@ -26,41 +26,48 @@ export default function CommentHeader({
       </CardUserStyled>
       <CardButtonsStyled>
         {user.username === username && (
-          <span className="delete" onClick={handleClick}>
+          <CommentButtonStyled type="delete" onClick={handleClick}>
             <Delete />
             Delete
-          </span>
+          </CommentButtonStyled>
         )}
-        <span className="reply" onClick={handleClick}>
+        <CommentButtonStyled type="reply" onClick={handleClick}>
           <Reply />
           Reply
-        </span>
+        </CommentButtonStyled>
       </CardButtonsStyled>
     </CardHeaderStyled>
   );
 }
+
+const CardButtonsStyled = styled.div`
+  display: flex;
+  gap: 1.5rem;
+`;
+
+const CommentButtonStyled = styled.button`
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+  font-weight: bold;
+  transition: opacity 0.2s ease;
+  background-color: transparent;
+  border: 0;
+  color: ${(props) => (props.type === 'delete' ? 'red' : 'hsl(238, 40%, 52%)')};
+  &:hover {
+    opacity: 0.5;
+  }
+  svg {
+    transform: scale(0.8);
+    margin: -1px 3px 0px 0px;
+  }
+`;
 
 const CardHeaderStyled = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex: 1;
-  span {
-    display: flex;
-    align-items: center;
-    font-size: 0.9rem;
-    font-weight: bold;
-    svg {
-      transform: scale(0.8);
-      margin: -1px 3px 0px 0px;
-    }
-  }
-  .reply {
-    color: hsl(238, 40%, 52%);
-  }
-  .delete {
-    color: red;
-  }
 `;
 
 const CardUserStyled = styled.div`
@@ -76,9 +83,4 @@ const CardUserStyled = styled.div`
     font-size: 0.8rem;
     opacity: 0.7;
   }
-`;
-
-const CardButtonsStyled = styled.div`
-  display: flex;
-  gap: 1.5rem;
 `;
