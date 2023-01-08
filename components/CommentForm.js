@@ -3,7 +3,12 @@ import styled from 'styled-components';
 import { CommentContext } from '../pages/context/Contexts';
 import Avatar from './Avatar';
 
-export default function CommentForm({ type = 'submit', id, toggleReply }) {
+export default function CommentForm({
+  type = 'submit',
+  id,
+  toggleReply,
+  user,
+}) {
   const [, setComment] = useContext(CommentContext);
 
   const [content, setContent] = useState('');
@@ -18,6 +23,7 @@ export default function CommentForm({ type = 'submit', id, toggleReply }) {
       username: 'juliusomo',
       currentUser: true,
       replies: [],
+      parentUser: user,
     },
     { comment_id: id, comment_type: type },
   ];

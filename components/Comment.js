@@ -24,7 +24,13 @@ export default function Comment({ commentData }) {
             createdAt={commentData.createdAt}
             toggleReply={toggleReply}
           />
-          <CommentBodyStyled>{commentData.content}</CommentBodyStyled>
+          <CommentBodyStyled>
+            {commentData.parentUser && (
+              <span>@{commentData.parentUser}&nbsp;</span>
+            )}
+
+            <p>{commentData.content}</p>
+          </CommentBodyStyled>
         </CommentContentStyled>
       </CommentStyled>
       {replyOpen && (
@@ -32,6 +38,7 @@ export default function Comment({ commentData }) {
           type="reply"
           id={commentData.id}
           toggleReply={toggleReply}
+          user={commentData.username}
         />
       )}
     </>
@@ -56,7 +63,15 @@ const CommentContentStyled = styled.div`
   padding-left: 1.5rem;
 `;
 
-const CommentBodyStyled = styled.p`
-  opacity: 0.7;
+const CommentBodyStyled = styled.div`
   padding-top: 1rem;
+  p {
+    opacity: 0.7;
+    display: inline;
+  }
+  span {
+    color: hsl(238, 40%, 52%);
+    opacity: 1;
+    font-weight: bold;
+  }
 `;
