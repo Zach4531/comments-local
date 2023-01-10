@@ -3,62 +3,52 @@ import Head from 'next/head';
 import { useState, createContext, useEffect } from 'react';
 import data from '../public/data.json';
 
-import { UserContext, CommentContext } from './context/Contexts';
+import { UserContext } from './context/Contexts';
 
 import styled from 'styled-components';
-import Replies from '../components/Replies';
 import CommentForm from '../components/CommentForm';
 import Comment from '../components/Comment';
 
 export default function Home() {
   const [user, setUser] = useState(data.currentUser);
   const [comments, setComments] = useState(data.comments);
-  const [comment, setComment] = useState(null);
-
-  console.log(user);
-
-  useEffect(() => {
-    if (comment) {
-      addComment(comment);
-    }
-  }, [comment]);
 
   function addComment(comment) {
-    if (comment[1]['comment_type'] === 'submit') {
-      const commentsUpdated = [...comments, comment[0]];
-      setComments(commentsUpdated);
-    } else {
-      addReply(comment);
-    }
-
-    setComment(null);
+    const commentsUpdated = [...comments, comment[0]];
+    setComments(commentsUpdated);
   }
 
   function addReply(reply) {
-    comments.forEach((comment) => {
-      if (comment.id === reply[1]['comment_id']) {
-        comment['replies'].push(reply[0]);
-        return false;
+    const commentsUpdated = comments.map((comment) => {
+      if (comment.id === reply[1].comment_id) {
+        comment.replies = [...comment.replies, reply[0]];
       }
+      return comment;
     });
-    setComment(null);
+    setComments(commentsUpdated);
   }
 
   return (
     <UserContext.Provider value={[user, setUser]}>
-      <CommentContext.Provider value={[comment, setComment]}>
-        <Wrapper>
-          {comments.map((comment) => (
-            <>
-              <Comment key={comment.id} commentData={comment} />
-              {comment.replies.length > 0 && (
-                <Replies replies={comment.replies} />
-              )}
-            </>
-          ))}
-          <CommentForm />
-        </Wrapper>
-      </CommentContext.Provider>
+      <Wrapper>
+        {comments.map((comment) => (
+          <>
+            <Comment
+              key={comment.id}
+              commentData={comment}
+              getContent={addReply}
+            />
+            {comment.replies.length > 0 && (
+              <ReplyWrapperStyled>
+                {comment.replies.map((reply) => (
+                  <Comment key={`reply_${comment.id}`} commentData={reply} />
+                ))}
+              </ReplyWrapperStyled>
+            )}
+          </>
+        ))}
+        <CommentForm getContent={addComment} />
+      </Wrapper>
     </UserContext.Provider>
   );
 }
@@ -70,5 +60,14 @@ const Wrapper = styled.div`
   padding: 1rem;
   width: 650px;
   margin: 1rem auto;
+  gap: 1.5rem;
+`;
+
+const ReplyWrapperStyled = styled.div`
+  width: 94%;
+  padding-left: 2rem;
+  border-left: 2px solid #ddd;
+  display: flex;
+  flex-direction: column;
   gap: 1.5rem;
 `;

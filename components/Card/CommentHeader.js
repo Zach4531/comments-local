@@ -2,31 +2,28 @@ import styled from 'styled-components';
 import Avatar from '../Avatar';
 import Reply from '../../public/images/icon-reply.svg';
 import Delete from '../../public/images/icon-delete.svg';
-import { useContext } from 'react';
-import { UserContext } from '../../pages/context/Contexts';
 
 export default function CommentHeader({
   username,
-  avatar,
+  img,
   createdAt,
-  toggleReply,
+  setVisibility,
+  isOwner,
 }) {
   function handleClick() {
-    toggleReply();
+    setVisibility();
   }
-
-  const [user] = useContext(UserContext);
 
   return (
     <CardHeaderStyled>
       <CardUserStyled>
-        <Avatar size="xsmall" avatar={avatar} />
+        <Avatar size="xsmall" img={img} />
         <p className="username">{username}</p>
         <p className="date">{createdAt}</p>
       </CardUserStyled>
       <CardButtonsStyled>
-        {user.username === username && (
-          <CommentButtonStyled type="delete" onClick={handleClick}>
+        {isOwner && (
+          <CommentButtonStyled type="delete">
             <Delete />
             Delete
           </CommentButtonStyled>

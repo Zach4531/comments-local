@@ -1,16 +1,14 @@
 import { useState, useContext } from 'react';
 import styled from 'styled-components';
-import { CommentContext } from '../pages/context/Contexts';
 import Avatar from './Avatar';
 
 export default function CommentForm({
   type = 'submit',
   id,
-  toggleReply,
-  user,
+  setVisibility,
+  username,
+  getContent,
 }) {
-  const [, setComment] = useContext(CommentContext);
-
   const [content, setContent] = useState('');
   const [error, setError] = useState(false);
 
@@ -23,34 +21,34 @@ export default function CommentForm({
       username: 'juliusomo',
       currentUser: true,
       replies: [],
-      parentUser: user,
+      parentUser: username,
     },
     { comment_id: id, comment_type: type },
   ];
-
   function handleClick() {
-    if (content.trim() === '') {
+    if (hasContent(content)) {
       setError(true);
       return;
     }
-
-    setComment(newComment);
+    getContent(newComment);
     setContent('');
     setError(false);
 
-    if (type === 'reply') {
-      toggleReply();
-    }
+    if (type === 'reply') setVisibility();
   }
 
   function handleChange(event) {
     setContent(event.target.value);
   }
 
+  function hasContent(content) {
+    return content.trim() === '';
+  }
+
   return (
     <>
       <FormStyled>
-        <Avatar size="medium" avatar={'./images/avatars/image-juliusomo.png'} />
+        <Avatar size="medium" img={'./images/avatars/image-juliusomo.png'} />
         <TextareaStyled
           name={`comment_name_${id}`}
           id={`comment_${id}`}
