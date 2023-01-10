@@ -1,44 +1,50 @@
-import { useState } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import styled from 'styled-components';
+import { UserContext } from '../pages/context/Contexts';
+
 import CommentForm from './CommentForm';
 import CommentHeader from './Card/CommentHeader';
 +65;
 import Counter from './Counter';
 
-export default function Comment({ commentData }) {
-  const [replyOpen, setReplyOpen] = useState(false);
+export default function Comment({ commentData, getContent }) {
+  const [isVisible, setIsVisible] = useState(false);
+  const [isOwned, setIsOwned] = useState(false);
+  const { score, username, createdAt, content, parentUser } = commentData;
+  const [user] = useContext(UserContext);
 
-  function toggleReply() {
-    setReplyOpen(!replyOpen);
+  function toggleVisibility() {
+    setIsVisible(!isVisible);
   }
+
+  useEffect(() => {
+    setIsOwned(user.username == username);
+  }, []);
 
   return (
     <>
       <CommentStyled>
-        <Counter score={commentData.score} />
+        <Counter score={score} />
         <CommentContentStyled>
           <CommentHeader
-            size="xsmall"
-            username={commentData.username}
-            avatar={`./images/avatars/image-${commentData.username}.png`}
-            createdAt={commentData.createdAt}
-            toggleReply={toggleReply}
+            username={username}
+            img={`./images/avatars/image-${username}.png`}
+            createdAt={createdAt}
+            setVisibility={toggleVisibility}
+            isOwner={isOwned}
           />
           <CommentBodyStyled>
-            {commentData.parentUser && (
-              <span>@{commentData.parentUser}&nbsp;</span>
-            )}
-
-            <p>{commentData.content}</p>
+            {parentUser && <span>@{parentUser}&nbsp;</span>}
+            <p>{content}</p>
           </CommentBodyStyled>
         </CommentContentStyled>
       </CommentStyled>
-      {replyOpen && (
+      {isVisible && (
         <CommentForm
           type="reply"
           id={commentData.id}
-          toggleReply={toggleReply}
-          user={commentData.username}
+          setVisibility={toggleVisibility}
+          getContent={getContent}
         />
       )}
     </>
