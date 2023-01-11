@@ -7,10 +7,15 @@ import CommentHeader from './Card/CommentHeader';
 +65;
 import Counter from './Counter';
 
-export default function Comment({ commentData, addReply }) {
+export default function Comment({
+  commentData,
+  addReply,
+  deleteComment,
+  deleteReply,
+}) {
   const [isVisible, setIsVisible] = useState(false);
   const [isOwned, setIsOwned] = useState(false);
-  const { score, username, createdAt, content, replyingTo } = commentData;
+  const { id, score, username, createdAt, content, replyingTo } = commentData;
   const [user] = useContext(UserContext);
 
   function toggleVisibility() {
@@ -20,6 +25,10 @@ export default function Comment({ commentData, addReply }) {
   useEffect(() => {
     setIsOwned(user.username == username);
   }, []);
+
+  function deleteRequest() {
+    deleteComment(id);
+  }
 
   return (
     <>
@@ -32,6 +41,7 @@ export default function Comment({ commentData, addReply }) {
             createdAt={createdAt}
             setVisibility={toggleVisibility}
             isOwner={isOwned}
+            deleteComment={deleteRequest}
           />
           <CommentBodyStyled>
             {replyingTo && <span>@{replyingTo}&nbsp;</span>}

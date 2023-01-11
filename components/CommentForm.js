@@ -6,7 +6,6 @@ export default function CommentForm({
   type = 'submit',
   id,
   setVisibility,
-  username,
   addComment,
   addReply,
 }) {

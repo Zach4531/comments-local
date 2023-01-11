@@ -28,6 +28,21 @@ export default function Home() {
     setComments(commentsUpdated);
   }
 
+  function deleteComment(id) {
+    const commentsUpdated = comments.filter((comment) => {
+      return comment.id !== id;
+    });
+    setComments(commentsUpdated);
+  }
+
+  function deleteReply(id) {
+    alert('la');
+    // const commentsUpdated = comments.filter((comment) => {
+    //   return comment.id !== id;
+    // });
+    // setComments(commentsUpdated);
+  }
+
   return (
     <UserContext.Provider value={[user, setUser]}>
       <Wrapper>
@@ -37,11 +52,16 @@ export default function Home() {
               key={comment.id}
               commentData={comment}
               addReply={addReply}
+              deleteComment={deleteComment}
             />
             {comment.replies.length > 0 && (
               <ReplyWrapperStyled>
                 {comment.replies.map((reply) => (
-                  <Comment key={`reply_${comment.id}`} commentData={reply} />
+                  <Comment
+                    key={`reply_${comment.id}`}
+                    commentData={reply}
+                    deleteComment={deleteReply}
+                  />
                 ))}
               </ReplyWrapperStyled>
             )}

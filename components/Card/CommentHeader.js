@@ -9,6 +9,7 @@ export default function CommentHeader({
   createdAt,
   setVisibility,
   isOwner,
+  deleteComment,
 }) {
   function handleClick() {
     setVisibility();
@@ -23,7 +24,7 @@ export default function CommentHeader({
       </CardUserStyled>
       <CardButtonsStyled>
         {isOwner && (
-          <CommentButtonStyled type="delete">
+          <CommentButtonStyled type="delete" onClick={deleteComment}>
             <Delete />
             Delete
           </CommentButtonStyled>
