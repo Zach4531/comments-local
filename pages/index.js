@@ -1,6 +1,6 @@
 import Head from 'next/head';
 // import styles from '../styles/Home.module.css'
-import { useState, createContext, useEffect } from 'react';
+import { Fragment, useState } from 'react';
 import data from '../public/data.json';
 
 import { UserContext } from './context/Contexts';
@@ -53,7 +53,7 @@ export default function Home() {
     <UserContext.Provider value={[user, setUser]}>
       <Wrapper>
         {comments.map((comment) => (
-          <>
+          <Fragment key={`${comment.id}`}>
             <Comment
               key={comment.id}
               commentData={comment}
@@ -64,7 +64,7 @@ export default function Home() {
               <ReplyWrapperStyled>
                 {comment.replies.map((reply) => (
                   <Comment
-                    key={`reply_${comment.id}`}
+                    key={`${comment.id}-${reply.id}`}
                     commentData={reply}
                     deleteReply={deleteReply}
                     parentId={comment.id}
@@ -72,7 +72,7 @@ export default function Home() {
                 ))}
               </ReplyWrapperStyled>
             )}
-          </>
+          </Fragment>
         ))}
         <CommentForm addComment={addComment} />
       </Wrapper>

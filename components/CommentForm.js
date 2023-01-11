@@ -14,7 +14,7 @@ export default function CommentForm({
 
   const newComment = [
     {
-      id: Math.floor(Math.random() * 100) + 5,
+      id: Math.floor(Math.random() * 1000) + 5,
       content: content,
       createdAt: '3 weeks ago',
       score: 0,
