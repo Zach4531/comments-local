@@ -2,56 +2,22 @@ import { useState, useContext } from 'react';
 import styled from 'styled-components';
 import Avatar from './Avatar';
 
-export default function CommentForm({
-  type = 'submit',
-  id,
-  setVisibility,
-  addComment,
-  addReply,
-}) {
+export default function CommentForm({ type, id, onSubmission }) {
   const [content, setContent] = useState('');
   const [error, setError] = useState(false);
 
-  const newComment = [
-    {
-      id: Math.floor(Math.random() * 1000) + 5,
-      content: content,
-      createdAt: '3 weeks ago',
-      score: 0,
-      username: 'juliusomo',
-      currentUser: true,
-      replies: [],
-    },
-    { comment_id: id },
-  ];
   function handleClick() {
-    if (hasContent(content)) {
+    if (content.trim() === '') {
       setError(true);
       return;
     }
-    type === 'submit' ? sendComment() : sendReply();
+    onSubmission(content);
     setContent('');
     setError(false);
   }
 
   function handleChange(event) {
     setContent(event.target.value);
-  }
-
-  function hasContent(content) {
-    return content.trim() === '';
-  }
-
-  function sendComment() {
-    console.log(newComment);
-
-    addComment(newComment);
-  }
-
-  function sendReply() {
-    newComment[0].replyingTo = 'juliusomo';
-    addReply(newComment);
-    setVisibility();
   }
 
   return (
@@ -62,13 +28,13 @@ export default function CommentForm({
           name={`comment_name_${id}`}
           id={`comment_${id}`}
           rows="5"
-          placeholder={`Add a ${type === 'reply' ? 'Reply' : 'Comment'}...`}
+          placeholder={`Add a ${type}...`}
           value={content}
           onChange={handleChange}
           error={error}
         ></TextareaStyled>
         <ButtonStyled type="submit" onClick={handleClick}>
-          {type === 'reply' ? 'Reply' : 'Submit'}
+          {type === 'comment' ? 'Submit' : 'Reply'}
         </ButtonStyled>
       </FormStyled>
       {error && (

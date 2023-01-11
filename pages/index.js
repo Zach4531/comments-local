@@ -13,15 +13,31 @@ export default function Home() {
   const [user, setUser] = useState(data.currentUser);
   const [comments, setComments] = useState(data.comments);
 
-  function addComment(comment) {
-    const commentsUpdated = [...comments, comment[0]];
+  function addComment(content) {
+    const newComment = {
+      id: Math.floor(Math.random() * 1000) + 5,
+      content: content,
+      createdAt: '3 weeks ago',
+      score: 0,
+      username: user.username,
+      replies: [],
+    };
+    const commentsUpdated = [...comments, newComment];
     setComments(commentsUpdated);
   }
 
-  function addReply(reply) {
+  function addReply(content, id) {
+    const newReply = {
+      id: Math.floor(Math.random() * 1000) + 5,
+      content: content,
+      createdAt: '3 weeks ago',
+      score: 0,
+      username: user.username,
+    };
+
     const commentsUpdated = comments.map((comment) => {
-      if (comment.id === reply[1].comment_id) {
-        comment.replies = [...comment.replies, reply[0]];
+      if (comment.id === id) {
+        comment.replies = [...comment.replies, newReply];
       }
       return comment;
     });
@@ -59,6 +75,7 @@ export default function Home() {
               commentData={comment}
               addReply={addReply}
               deleteComment={deleteComment}
+              parentId={comment.id}
             />
             {comment.replies.length > 0 && (
               <ReplyWrapperStyled>
@@ -74,7 +91,7 @@ export default function Home() {
             )}
           </Fragment>
         ))}
-        <CommentForm addComment={addComment} />
+        <CommentForm onSubmission={addComment} type="comment" />
       </Wrapper>
     </UserContext.Provider>
   );

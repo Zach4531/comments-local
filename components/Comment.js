@@ -35,6 +35,11 @@ export default function Comment({
     deleteReply(id, parentId);
   }
 
+  function submitReply(content) {
+    addReply(content, parentId);
+    setIsVisible(false);
+  }
+
   return (
     <>
       <CommentStyled>
@@ -61,7 +66,7 @@ export default function Comment({
           type="reply"
           id={commentData.id}
           setVisibility={toggleVisibility}
-          addReply={addReply}
+          onSubmission={submitReply}
         />
       )}
     </>
