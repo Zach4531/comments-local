@@ -35,12 +35,18 @@ export default function Home() {
     setComments(commentsUpdated);
   }
 
-  function deleteReply(id) {
-    alert('la');
-    // const commentsUpdated = comments.filter((comment) => {
-    //   return comment.id !== id;
-    // });
-    // setComments(commentsUpdated);
+  function deleteReply(id, parentId) {
+    const commentsUpdated = comments.map((comment) => {
+      if (comment.id === parentId) {
+        if (comment.replies.length > 0) {
+          comment.replies = comment.replies.filter((reply) => {
+            return reply.id !== id;
+          });
+        }
+      }
+      return comment;
+    });
+    setComments(commentsUpdated);
   }
 
   return (
@@ -60,7 +66,8 @@ export default function Home() {
                   <Comment
                     key={`reply_${comment.id}`}
                     commentData={reply}
-                    deleteComment={deleteReply}
+                    deleteReply={deleteReply}
+                    parentId={comment.id}
                   />
                 ))}
               </ReplyWrapperStyled>

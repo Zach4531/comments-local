@@ -12,6 +12,7 @@ export default function Comment({
   addReply,
   deleteComment,
   deleteReply,
+  parentId,
 }) {
   const [isVisible, setIsVisible] = useState(false);
   const [isOwned, setIsOwned] = useState(false);
@@ -26,8 +27,12 @@ export default function Comment({
     setIsOwned(user.username == username);
   }, []);
 
-  function deleteRequest() {
+  function deleteCommentRequest() {
     deleteComment(id);
+  }
+
+  function deleteReplyRequest() {
+    deleteReply(id, parentId);
   }
 
   return (
@@ -41,7 +46,9 @@ export default function Comment({
             createdAt={createdAt}
             setVisibility={toggleVisibility}
             isOwner={isOwned}
-            deleteComment={deleteRequest}
+            deleteRequest={
+              deleteComment ? deleteCommentRequest : deleteReplyRequest
+            }
           />
           <CommentBodyStyled>
             {replyingTo && <span>@{replyingTo}&nbsp;</span>}
