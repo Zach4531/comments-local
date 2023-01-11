@@ -7,7 +7,8 @@ export default function CommentForm({
   id,
   setVisibility,
   username,
-  getContent,
+  addComment,
+  addReply,
 }) {
   const [content, setContent] = useState('');
   const [error, setError] = useState(false);
@@ -21,20 +22,17 @@ export default function CommentForm({
       username: 'juliusomo',
       currentUser: true,
       replies: [],
-      parentUser: username,
     },
-    { comment_id: id, comment_type: type },
+    { comment_id: id },
   ];
   function handleClick() {
     if (hasContent(content)) {
       setError(true);
       return;
     }
-    getContent(newComment);
+    type === 'submit' ? sendComment() : sendReply();
     setContent('');
     setError(false);
-
-    if (type === 'reply') setVisibility();
   }
 
   function handleChange(event) {
@@ -43,6 +41,18 @@ export default function CommentForm({
 
   function hasContent(content) {
     return content.trim() === '';
+  }
+
+  function sendComment() {
+    console.log(newComment);
+
+    addComment(newComment);
+  }
+
+  function sendReply() {
+    newComment[0].replyingTo = 'juliusomo';
+    addReply(newComment);
+    setVisibility();
   }
 
   return (

@@ -36,7 +36,7 @@ export default function Home() {
             <Comment
               key={comment.id}
               commentData={comment}
-              getContent={addReply}
+              addReply={addReply}
             />
             {comment.replies.length > 0 && (
               <ReplyWrapperStyled>
@@ -47,7 +47,7 @@ export default function Home() {
             )}
           </>
         ))}
-        <CommentForm getContent={addComment} />
+        <CommentForm addComment={addComment} />
       </Wrapper>
     </UserContext.Provider>
   );
