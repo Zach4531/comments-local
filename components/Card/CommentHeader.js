@@ -51,7 +51,8 @@ const CommentButtonStyled = styled.button`
   transition: opacity 0.2s ease;
   background-color: transparent;
   border: 0;
-  color: ${(props) => (props.type === 'delete' ? 'red' : 'hsl(238, 40%, 52%)')};
+  color: ${(props) =>
+    props.type === 'delete' ? 'hsl(358, 79%, 66%)' : 'hsl(238, 40%, 52%)'};
   &:hover {
     opacity: 0.5;
   }

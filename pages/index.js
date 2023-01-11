@@ -8,10 +8,12 @@ import { UserContext } from './context/Contexts';
 import styled from 'styled-components';
 import CommentForm from '../components/CommentForm';
 import Comment from '../components/Comment';
+import DeleteModal from '../components/DeleteModal';
 
 export default function Home() {
   const [user, setUser] = useState(data.currentUser);
   const [comments, setComments] = useState(data.comments);
+  const [modalOpen, setModalOpen] = useState(true);
 
   function addComment(content) {
     const newComment = {
@@ -44,7 +46,12 @@ export default function Home() {
     setComments(commentsUpdated);
   }
 
+  function deleteComfirmation() {
+    setModalOpen(true);
+  }
+
   function deleteComment(id) {
+    deleteComfirmation();
     const commentsUpdated = comments.filter((comment) => {
       return comment.id !== id;
     });
@@ -92,6 +99,7 @@ export default function Home() {
           </Fragment>
         ))}
         <CommentForm onSubmission={addComment} type="comment" />
+        {modalOpen && <DeleteModal />}
       </Wrapper>
     </UserContext.Provider>
   );
