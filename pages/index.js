@@ -12,6 +12,7 @@ import Comment from '../components/Comment';
 export default function Home() {
   const [user, setUser] = useState(data.currentUser);
   const [comments, setComments] = useState(data.comments);
+  const [scroll, setScroll] = useState(true);
 
   function addComment(content) {
     const newComment = {
@@ -38,6 +39,33 @@ export default function Home() {
     const commentsUpdated = comments.map((comment) => {
       if (comment.id === id) {
         comment.replies = [...comment.replies, newReply];
+      }
+      return comment;
+    });
+    setComments(commentsUpdated);
+  }
+
+  function editComment(content, id) {
+    const commentsUpdated = comments.map((comment) => {
+      if (comment.id === id) {
+        comment.content = content;
+      }
+      return comment;
+    });
+    setComments(commentsUpdated);
+  }
+
+  function editReply(content, id, parentId) {
+    const commentsUpdated = comments.map((comment) => {
+      if (comment.id === parentId) {
+        if (comment.replies.length > 0) {
+          comment.replies.map((reply) => {
+            if (reply.id === id) {
+              reply.content = content;
+            }
+            return reply;
+          });
+        }
       }
       return comment;
     });
@@ -74,6 +102,7 @@ export default function Home() {
               key={comment.id}
               commentData={comment}
               addReply={addReply}
+              editComment={editComment}
               deleteComment={deleteComment}
               parentId={comment.id}
             />
@@ -84,6 +113,7 @@ export default function Home() {
                     key={`${comment.id}-${reply.id}`}
                     commentData={reply}
                     deleteReply={deleteReply}
+                    editReply={editReply}
                     parentId={comment.id}
                   />
                 ))}

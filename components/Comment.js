@@ -8,10 +8,13 @@ import DeleteModal from './DeleteModal';
 import CommentHeader from './Card/CommentHeader';
 +65;
 import Counter from './Counter';
+import EditForm from './EditForm';
 
 export default function Comment({
   commentData,
   addReply,
+  editComment,
+  editReply,
   deleteComment,
   deleteReply,
   parentId,
@@ -21,6 +24,7 @@ export default function Comment({
   const { id, score, username, createdAt, content, replyingTo } = commentData;
   const [user] = useContext(UserContext);
   const [modalOpen, setModalOpen] = useState(false);
+  const [edit, setEdit] = useState(false);
 
   function toggleVisibility() {
     setIsVisible(!isVisible);
@@ -32,6 +36,10 @@ export default function Comment({
 
   function deleteRequest() {
     setModalOpen(true);
+  }
+
+  function editRequest() {
+    setEdit(!edit);
   }
 
   function deleteConfirmation(confirmation) {
@@ -47,6 +55,16 @@ export default function Comment({
     setIsVisible(false);
   }
 
+  function submitCommentEdit(content) {
+    editComment(content, id);
+    setEdit(false);
+  }
+
+  function submitReplyEdit(content) {
+    editReply(content, id, parentId);
+    setEdit(false);
+  }
+
   return (
     <>
       <CommentStyled>
@@ -59,11 +77,20 @@ export default function Comment({
             setVisibility={toggleVisibility}
             isOwner={isOwned}
             deleteRequest={deleteRequest}
+            editRequest={editRequest}
           />
-          <CommentBodyStyled>
-            {replyingTo && <span>@{replyingTo}&nbsp;</span>}
-            <p>{content}</p>
-          </CommentBodyStyled>
+          {edit ? (
+            <EditForm
+              text={content}
+              id={commentData.id}
+              onSubmission={editComment ? submitCommentEdit : submitReplyEdit}
+            />
+          ) : (
+            <CommentBodyStyled>
+              {replyingTo && <span>@{replyingTo}&nbsp;</span>}
+              <p>{content}</p>
+            </CommentBodyStyled>
+          )}
         </CommentContentStyled>
       </CommentStyled>
       {isVisible && (

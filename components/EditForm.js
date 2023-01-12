@@ -1,9 +1,8 @@
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
-import Avatar from './Avatar';
 
-export default function CommentForm({ type, id, onSubmission }) {
-  const [content, setContent] = useState('');
+export default function EditForm({ text, id, onSubmission }) {
+  const [content, setContent] = useState(text);
   const [error, setError] = useState(false);
 
   function handleClick() {
@@ -23,18 +22,16 @@ export default function CommentForm({ type, id, onSubmission }) {
   return (
     <>
       <FormStyled>
-        <Avatar size="medium" img={'./images/avatars/image-juliusomo.png'} />
         <TextareaStyled
-          name={`comment_name_${id}`}
-          id={`comment_${id}`}
+          name={`comment_edit_name_${id}`}
+          id={`comment_edit_${id}`}
           rows="5"
-          placeholder={`Add a ${type}...`}
           value={content}
           onChange={handleChange}
           error={error}
         ></TextareaStyled>
         <ButtonStyled type="submit" onClick={handleClick}>
-          {type === 'comment' ? 'Submit' : 'Reply'}
+          Update
         </ButtonStyled>
       </FormStyled>
       {error && (
@@ -46,9 +43,10 @@ export default function CommentForm({ type, id, onSubmission }) {
 
 const FormStyled = styled.div`
   display: flex;
-  align-items: flex-start;
+  flex-direction: column;
+  align-items: flex-end;
   gap: 1rem;
-  padding: 1.2rem;
+  padding: 1.2rem 0rem;
   border-radius: 0.5rem;
   background-color: white;
   width: 100%;
@@ -68,6 +66,7 @@ const ButtonStyled = styled.button`
 
 const TextareaStyled = styled.textarea`
   flex: 1;
+  width: 100%;
   border-radius: 0.5rem;
   padding: 1rem;
   border: 2px solid ${(props) => (props.error ? 'red' : '#ccc')};

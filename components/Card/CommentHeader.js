@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import Avatar from '../Avatar';
 import Reply from '../../public/images/icon-reply.svg';
 import Delete from '../../public/images/icon-delete.svg';
+import Edit from '../../public/images/icon-edit.svg';
 
 export default function CommentHeader({
   username,
@@ -10,6 +11,7 @@ export default function CommentHeader({
   setVisibility,
   isOwner,
   deleteRequest,
+  editRequest,
 }) {
   function handleClick() {
     setVisibility();
@@ -23,16 +25,23 @@ export default function CommentHeader({
         <p className="date">{createdAt}</p>
       </CardUserStyled>
       <CardButtonsStyled>
-        {isOwner && (
-          <CommentButtonStyled type="delete" onClick={deleteRequest}>
-            <Delete />
-            Delete
+        {isOwner ? (
+          <>
+            <CommentButtonStyled type="delete" onClick={deleteRequest}>
+              <Delete />
+              Delete
+            </CommentButtonStyled>
+            <CommentButtonStyled onClick={editRequest}>
+              <Edit />
+              Edit
+            </CommentButtonStyled>
+          </>
+        ) : (
+          <CommentButtonStyled onClick={handleClick}>
+            <Reply />
+            Reply
           </CommentButtonStyled>
         )}
-        <CommentButtonStyled type="reply" onClick={handleClick}>
-          <Reply />
-          Reply
-        </CommentButtonStyled>
       </CardButtonsStyled>
     </CardHeaderStyled>
   );
