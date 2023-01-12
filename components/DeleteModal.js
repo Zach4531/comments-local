@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export default function DeleteModal() {
+export default function DeleteModal({ deleteConfirmation }) {
   return (
     <ModalContainer>
       <ModalStyled>
@@ -10,10 +10,18 @@ export default function DeleteModal() {
           comment and can't be undone;
         </p>
         <div>
-          <ButtonStyled btn_type="cancel" type="button">
+          <ButtonStyled
+            btn_type="cancel"
+            type="button"
+            onClick={() => deleteConfirmation(false)}
+          >
             no, cancel
           </ButtonStyled>
-          <ButtonStyled btn_type="delete" type="button">
+          <ButtonStyled
+            btn_type="delete"
+            type="button"
+            onClick={() => deleteConfirmation(true)}
+          >
             yes, delete
           </ButtonStyled>
         </div>
@@ -62,4 +70,11 @@ const ButtonStyled = styled.button`
   width: 100%;
   text-transform: uppercase;
   font-weight: bold;
+  transition: background 0.2s ease;
+  &:hover {
+    background: ${(props) =>
+      props.btn_type === 'delete'
+        ? 'hsl(358, 79%, 76%)'
+        : 'hsl(211, 10%, 55%)'};
+  }
 `;

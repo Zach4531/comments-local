@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import { UserContext } from '../pages/context/Contexts';
 
 import CommentForm from './CommentForm';
+import DeleteModal from './DeleteModal';
+
 import CommentHeader from './Card/CommentHeader';
 +65;
 import Counter from './Counter';
@@ -18,6 +20,7 @@ export default function Comment({
   const [isOwned, setIsOwned] = useState(false);
   const { id, score, username, createdAt, content, replyingTo } = commentData;
   const [user] = useContext(UserContext);
+  const [modalOpen, setModalOpen] = useState(false);
 
   function toggleVisibility() {
     setIsVisible(!isVisible);
@@ -27,12 +30,16 @@ export default function Comment({
     setIsOwned(user.username == username);
   }, []);
 
-  function deleteCommentRequest() {
-    deleteComment(id);
+  function deleteRequest() {
+    setModalOpen(true);
   }
 
-  function deleteReplyRequest() {
-    deleteReply(id, parentId);
+  function deleteConfirmation(confirmation) {
+    if (confirmation) {
+      deleteComment ? deleteComment(id) : deleteReply(id, parentId);
+    } else {
+      setModalOpen(false);
+    }
   }
 
   function submitReply(content) {
@@ -51,9 +58,7 @@ export default function Comment({
             createdAt={createdAt}
             setVisibility={toggleVisibility}
             isOwner={isOwned}
-            deleteRequest={
-              deleteComment ? deleteCommentRequest : deleteReplyRequest
-            }
+            deleteRequest={deleteRequest}
           />
           <CommentBodyStyled>
             {replyingTo && <span>@{replyingTo}&nbsp;</span>}
@@ -69,6 +74,7 @@ export default function Comment({
           onSubmission={submitReply}
         />
       )}
+      {modalOpen && <DeleteModal deleteConfirmation={deleteConfirmation} />}
     </>
   );
 }
