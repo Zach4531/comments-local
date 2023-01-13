@@ -130,7 +130,6 @@ export default function Home() {
                     deleteReply={deleteReply}
                     editReply={editReply}
                     parentId={comment.id}
-                    parentUser={comment.username}
                   />
                 ))}
               </ReplyWrapperStyled>
@@ -148,7 +147,8 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-items: flex-end;
   padding: 1rem;
-  width: 650px;
+  width: 100%;
+  max-width: 650px;
   margin: 1rem auto;
   gap: 1.5rem;
 `;
@@ -160,4 +160,9 @@ const ReplyWrapperStyled = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  @media (max-width: 650px) {
+    width: 100%;
+    padding-left: 0;
+    border: 0;
+  }
 `;

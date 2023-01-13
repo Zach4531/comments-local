@@ -49,4 +49,9 @@ const CounterStyled = styled.div`
       color: hsl(238, 40%, 52%);
     }
   }
+  @media (max-width: 650px) {
+    width: 110px;
+    flex-direction: row;
+    order: 2;
+  }
 `;

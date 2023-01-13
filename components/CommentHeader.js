@@ -52,7 +52,10 @@ export default function CommentHeader({
 
 const CardButtonsStyled = styled.div`
   display: flex;
-  gap: 1.5rem;
+  gap: 1rem;
+  @media (max-width: 650px) {
+    display: none;
+  }
 `;
 
 const CommentButtonStyled = styled.button`
