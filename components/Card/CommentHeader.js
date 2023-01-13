@@ -21,7 +21,10 @@ export default function CommentHeader({
     <CardHeaderStyled>
       <CardUserStyled>
         <Avatar size="xsmall" img={img} />
-        <p className="username">{username}</p>
+        <p className="username">
+          {username}
+          {isOwner && <span>you</span>}
+        </p>
         <p className="date">{createdAt}</p>
       </CardUserStyled>
       <CardButtonsStyled>
@@ -85,6 +88,13 @@ const CardUserStyled = styled.div`
     font-size: 0.8rem;
     font-weight: bold;
     padding: 0rem 1rem;
+    span {
+      background: hsl(238, 40%, 52%);
+      color: white;
+      padding: 0.1rem;
+      border-radius: 0.2rem;
+      margin-left: 0.2rem;
+    }
   }
 
   .date {
