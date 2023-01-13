@@ -51,7 +51,7 @@ export default function Comment({
   }
 
   function submitReply(content) {
-    addReply(content, parentId);
+    addReply(content, parentId, username);
     setIsVisible(false);
   }
 

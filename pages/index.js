@@ -36,12 +36,13 @@ export default function Home() {
     setComments(commentsUpdated);
   }
 
-  function addReply(content, id) {
+  function addReply(content, id, replyingTo) {
     const newReply = {
       id: Math.floor(Math.random() * 1000) + 5,
       content: content,
       createdAt: '3 weeks ago',
       score: 0,
+      replyingTo: replyingTo,
       username: user.username,
     };
 
@@ -129,6 +130,7 @@ export default function Home() {
                     deleteReply={deleteReply}
                     editReply={editReply}
                     parentId={comment.id}
+                    parentUser={comment.username}
                   />
                 ))}
               </ReplyWrapperStyled>
