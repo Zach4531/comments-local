@@ -54,7 +54,9 @@ const CardButtonsStyled = styled.div`
   display: flex;
   gap: 1rem;
   @media (max-width: 650px) {
-    display: none;
+    position: absolute;
+    right: 1.2rem;
+    bottom: 1.6rem;
   }
 `;
 

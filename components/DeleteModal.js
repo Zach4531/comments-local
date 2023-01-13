@@ -33,6 +33,7 @@ export default function DeleteModal({ deleteConfirmation }) {
 const ModalContainer = styled.div`
   background: hsl(0, 0%, 0%, 0.8);
   position: fixed;
+  z-index: 100;
   top: 0;
   bottom: 0;
   left: 0;

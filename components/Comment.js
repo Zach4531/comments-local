@@ -94,25 +94,6 @@ export default function Comment({
             </CommentBodyStyled>
           )}
         </CommentContentStyled>
-        <CardButtonsStyled>
-          {isOwned ? (
-            <>
-              <CommentButtonStyled type="delete" onClick={deleteRequest}>
-                <Delete />
-                Delete
-              </CommentButtonStyled>
-              <CommentButtonStyled onClick={editRequest}>
-                <Edit />
-                Edit
-              </CommentButtonStyled>
-            </>
-          ) : (
-            <CommentButtonStyled onClick={toggleVisibility}>
-              <Reply />
-              Reply
-            </CommentButtonStyled>
-          )}
-        </CardButtonsStyled>
       </CommentStyled>
       {isVisible && (
         <CommentForm
@@ -130,6 +111,7 @@ export default function Comment({
 const CommentStyled = styled.div`
   display: flex;
   align-items: flex-start;
+  position: relative;
   padding: 1.2rem;
   border-radius: 0.5rem;
   margin-left: auto;
@@ -146,6 +128,7 @@ const CommentContentStyled = styled.div`
   font-size: 0.9rem;
   flex: 1;
   padding-left: 1.5rem;
+  width: 100%;
   @media (max-width: 650px) {
     order: 1;
     padding-left: 0;
@@ -163,32 +146,5 @@ const CommentBodyStyled = styled.div`
     color: hsl(238, 40%, 52%);
     opacity: 1;
     font-weight: bold;
-  }
-`;
-
-const CardButtonsStyled = styled.div`
-  display: flex;
-  gap: 1rem;
-  @media (min-width: 650px) {
-    display: none;
-  }
-`;
-
-const CommentButtonStyled = styled.button`
-  display: flex;
-  align-items: center;
-  font-size: 0.9rem;
-  font-weight: bold;
-  transition: opacity 0.2s ease;
-  background-color: transparent;
-  border: 0;
-  color: ${(props) =>
-    props.type === 'delete' ? 'hsl(358, 79%, 66%)' : 'hsl(238, 40%, 52%)'};
-  &:hover {
-    opacity: 0.5;
-  }
-  svg {
-    transform: scale(0.8);
-    margin: -1px 3px 0px 0px;
   }
 `;

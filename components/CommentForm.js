@@ -52,6 +52,15 @@ const FormStyled = styled.div`
   border-radius: 0.5rem;
   background-color: white;
   width: 100%;
+  position: relative;
+  @media (max-width: 650px) {
+    padding-bottom: 6rem;
+    img {
+      position: absolute;
+      bottom: 1rem;
+      left: 1rem;
+    }
+  }
 `;
 
 const ButtonStyled = styled.button`
@@ -63,6 +72,11 @@ const ButtonStyled = styled.button`
   transition: opacity 0.2s ease;
   &:hover {
     opacity: 0.5;
+  }
+  @media (max-width: 650px) {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
   }
 `;
 
