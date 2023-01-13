@@ -5,7 +5,7 @@ import { UserContext } from '../pages/context/Contexts';
 import CommentForm from './CommentForm';
 import DeleteModal from './DeleteModal';
 
-import CommentHeader from './Card/CommentHeader';
+import CommentHeader from './CommentHeader';
 +65;
 import Counter from './Counter';
 import EditForm from './EditForm';

@@ -1,8 +1,8 @@
 import styled from 'styled-components';
-import Avatar from '../Avatar';
-import Reply from '../../public/images/icon-reply.svg';
-import Delete from '../../public/images/icon-delete.svg';
-import Edit from '../../public/images/icon-edit.svg';
+import Avatar from './Avatar';
+import Reply from '../public/images/icon-reply.svg';
+import Delete from '../public/images/icon-delete.svg';
+import Edit from '../public/images/icon-edit.svg';
 
 export default function CommentHeader({
   username,
