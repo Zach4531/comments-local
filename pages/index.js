@@ -1,6 +1,6 @@
 import Head from 'next/head';
 // import styles from '../styles/Home.module.css'
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import data from '../public/data.json';
 
 import { UserContext } from './context/Contexts';
@@ -11,10 +11,28 @@ import Comment from '../components/Comment';
 import Alert from '../components/Alert';
 
 export default function Home() {
-  const [user, setUser] = useState(data.currentUser);
-  const [comments, setComments] = useState(data.comments);
-  const [scroll, setScroll] = useState(true);
+  const [user, setUser] = useState();
+  const [comments, setComments] = useState();
   const [alert, setAlert] = useState({});
+
+  useEffect(() => {
+    const local = JSON.parse(localStorage.getItem('frontEndComments'));
+
+    if (!local) {
+      localStorage.setItem('frontEndComments', JSON.stringify(data));
+    }
+
+    setUser(local?.currentUser || data.currentUser);
+    setComments(local?.comments || data.comments);
+  }, []);
+
+  function updateData(data) {
+    setComments(data);
+    localStorage.setItem(
+      'frontEndComments',
+      JSON.stringify({ currentUser: user, comments: data })
+    );
+  }
 
   function showAlert(text) {
     setAlert({ show: true, text: text });
@@ -33,7 +51,7 @@ export default function Home() {
       replies: [],
     };
     const commentsUpdated = [...comments, newComment];
-    setComments(commentsUpdated);
+    updateData(commentsUpdated);
   }
 
   function addReply(content, id, replyingTo) {
@@ -52,7 +70,7 @@ export default function Home() {
       }
       return comment;
     });
-    setComments(commentsUpdated);
+    updateData(commentsUpdated);
   }
 
   function editComment(content, id) {
@@ -62,7 +80,7 @@ export default function Home() {
       }
       return comment;
     });
-    setComments(commentsUpdated);
+    updateData(commentsUpdated);
     showAlert('Comment successfully updated!');
   }
 
@@ -80,7 +98,7 @@ export default function Home() {
       }
       return comment;
     });
-    setComments(commentsUpdated);
+    updateData(commentsUpdated);
     showAlert('Comment successfully updated!');
   }
 
@@ -88,7 +106,7 @@ export default function Home() {
     const commentsUpdated = comments.filter((comment) => {
       return comment.id !== id;
     });
-    setComments(commentsUpdated);
+    updateData(commentsUpdated);
     showAlert('Comment deleted!');
   }
 
@@ -103,41 +121,43 @@ export default function Home() {
       }
       return comment;
     });
-    setComments(commentsUpdated);
+    updateData(commentsUpdated);
     showAlert('Comment deleted!');
   }
 
   return (
     <UserContext.Provider value={[user, setUser]}>
-      <Wrapper>
-        {alert.show && <Alert text={alert.text} />}
-        {comments.map((comment) => (
-          <Fragment key={`${comment.id}`}>
-            <Comment
-              key={comment.id}
-              commentData={comment}
-              addReply={addReply}
-              editComment={editComment}
-              deleteComment={deleteComment}
-              parentId={comment.id}
-            />
-            {comment.replies.length > 0 && (
-              <ReplyWrapperStyled>
-                {comment.replies.map((reply) => (
-                  <Comment
-                    key={`${comment.id}-${reply.id}`}
-                    commentData={reply}
-                    deleteReply={deleteReply}
-                    editReply={editReply}
-                    parentId={comment.id}
-                  />
-                ))}
-              </ReplyWrapperStyled>
-            )}
-          </Fragment>
-        ))}
-        <CommentForm onSubmission={addComment} type="comment" />
-      </Wrapper>
+      {comments && (
+        <Wrapper>
+          {alert.show && <Alert text={alert.text} />}
+          {comments.map((comment) => (
+            <Fragment key={`${comment.id}`}>
+              <Comment
+                key={comment.id}
+                commentData={comment}
+                addReply={addReply}
+                editComment={editComment}
+                deleteComment={deleteComment}
+                parentId={comment.id}
+              />
+              {comment.replies.length > 0 && (
+                <ReplyWrapperStyled>
+                  {comment.replies.map((reply) => (
+                    <Comment
+                      key={`${comment.id}-${reply.id}`}
+                      commentData={reply}
+                      deleteReply={deleteReply}
+                      editReply={editReply}
+                      parentId={comment.id}
+                    />
+                  ))}
+                </ReplyWrapperStyled>
+              )}
+            </Fragment>
+          ))}
+          <CommentForm onSubmission={addComment} type="comment" />
+        </Wrapper>
+      )}
     </UserContext.Provider>
   );
 }
