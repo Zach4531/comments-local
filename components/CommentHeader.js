@@ -1,8 +1,6 @@
 import styled from 'styled-components';
 import Avatar from './Avatar';
-import Reply from '../public/images/icon-reply.svg';
-import Delete from '../public/images/icon-delete.svg';
-import Edit from '../public/images/icon-edit.svg';
+import Icon from './Icon';
 
 export default function CommentHeader({
   username,
@@ -31,18 +29,15 @@ export default function CommentHeader({
         {isOwner ? (
           <>
             <CommentButtonStyled type="delete" onClick={deleteRequest}>
-              <Delete />
-              Delete
+              <Icon text="Delete" icon="delete" />
             </CommentButtonStyled>
             <CommentButtonStyled onClick={editRequest}>
-              <Edit />
-              Edit
+              <Icon text="Edit" icon="edit" />
             </CommentButtonStyled>
           </>
         ) : (
           <CommentButtonStyled onClick={handleClick}>
-            <Reply />
-            Reply
+            <Icon text="Reply" icon="reply" />
           </CommentButtonStyled>
         )}
       </CardButtonsStyled>

@@ -33,19 +33,3 @@ export default function Icon({ text, icon }) {
     </>
   );
 }
-
-const AlertStyled = styled.p`
-  position: fixed;
-  bottom: 1rem;
-  left: 0;
-  right: 0;
-  margin: 0 auto;
-  padding: 1rem;
-  text-align: center;
-  background: green;
-  color: white;
-  font-weight: bold;
-  width: 100%;
-  max-width: 600px;
-  border-radius: 0.5rem;
-`;
