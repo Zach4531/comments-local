@@ -8,11 +8,20 @@ import { UserContext } from './context/Contexts';
 import styled from 'styled-components';
 import CommentForm from '../components/CommentForm';
 import Comment from '../components/Comment';
+import Alert from '../components/Alert';
 
 export default function Home() {
   const [user, setUser] = useState(data.currentUser);
   const [comments, setComments] = useState(data.comments);
   const [scroll, setScroll] = useState(true);
+  const [alert, setAlert] = useState({});
+
+  function showAlert(text) {
+    setAlert({ show: true, text: text });
+    setTimeout(() => {
+      setAlert({ show: false, text: '' });
+    }, '4000');
+  }
 
   function addComment(content) {
     const newComment = {
@@ -53,6 +62,7 @@ export default function Home() {
       return comment;
     });
     setComments(commentsUpdated);
+    showAlert('Comment successfully updated!');
   }
 
   function editReply(content, id, parentId) {
@@ -70,6 +80,7 @@ export default function Home() {
       return comment;
     });
     setComments(commentsUpdated);
+    showAlert('Comment successfully updated!');
   }
 
   function deleteComment(id) {
@@ -77,6 +88,7 @@ export default function Home() {
       return comment.id !== id;
     });
     setComments(commentsUpdated);
+    showAlert('Comment deleted!');
   }
 
   function deleteReply(id, parentId) {
@@ -91,11 +103,13 @@ export default function Home() {
       return comment;
     });
     setComments(commentsUpdated);
+    showAlert('Comment deleted!');
   }
 
   return (
     <UserContext.Provider value={[user, setUser]}>
       <Wrapper>
+        {alert.show && <Alert text={alert.text} />}
         {comments.map((comment) => (
           <Fragment key={`${comment.id}`}>
             <Comment
