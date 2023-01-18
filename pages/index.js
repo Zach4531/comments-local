@@ -24,6 +24,7 @@ export default function Home() {
 
     setUser(local?.currentUser || data.currentUser);
     setComments(local?.comments || data.comments);
+    console.log('ad');
   }, []);
 
   function updateData(data) {

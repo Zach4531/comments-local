@@ -2,8 +2,8 @@ import { useState } from 'react';
 import styled from 'styled-components';
 
 export default function UserLogin({ authenticate }) {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('Zach4531');
+  const [password, setPassword] = useState('password');
 
   const [allUsers, setAllUsers] = useState([
     { username: 'Zach4531', password: 'password' },
