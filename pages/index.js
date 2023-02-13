@@ -1,7 +1,8 @@
 import Head from 'next/head';
 // import styles from '../styles/Home.module.css'
 import { Fragment, useEffect, useState } from 'react';
-import data from '../public/data.json';
+import data from '../public/api/data.json';
+import { getComments } from '../public/api/comments';
 
 import { UserContext } from './context/Contexts';
 
@@ -14,6 +15,7 @@ export default function Home() {
   const [user, setUser] = useState();
   const [comments, setComments] = useState();
   const [alert, setAlert] = useState({});
+  const [c, setC] = useState();
 
   useEffect(() => {
     const local = JSON.parse(localStorage.getItem('frontEndComments'));
@@ -24,7 +26,11 @@ export default function Home() {
 
     setUser(local?.currentUser || data.currentUser);
     setComments(local?.comments || data.comments);
-    console.log('ad');
+  }, []);
+
+  useEffect(() => {
+    console.log('getting');
+    getComments().then((data) => setC(JSON.stringify(data.comments)));
   }, []);
 
   function updateData(data) {
@@ -157,6 +163,7 @@ export default function Home() {
             </Fragment>
           ))}
           <CommentForm onSubmission={addComment} type="comment" />
+          {c}
         </Wrapper>
       )}
     </UserContext.Provider>
