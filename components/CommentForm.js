@@ -22,7 +22,7 @@ export default function CommentForm({ type, id, onSubmission }) {
 
   return (
     <>
-      <FormStyled>
+      <CommentFormContainer>
         <Avatar size="medium" img={'./images/avatars/image-juliusomo.png'} />
         <TextareaStyled
           name={`comment_name_${id}`}
@@ -30,13 +30,13 @@ export default function CommentForm({ type, id, onSubmission }) {
           rows="5"
           placeholder={`Add a ${type}...`}
           value={content}
-          onChange={handleChange}
           error={error}
+          onChange={handleChange}
         ></TextareaStyled>
         <ButtonStyled type="submit" onClick={handleClick}>
           {type === 'comment' ? 'Submit' : 'Reply'}
         </ButtonStyled>
-      </FormStyled>
+      </CommentFormContainer>
       {error && (
         <ErrorStyled error={error}>Comment cannot be empty</ErrorStyled>
       )}
@@ -44,7 +44,7 @@ export default function CommentForm({ type, id, onSubmission }) {
   );
 }
 
-const FormStyled = styled.div`
+const CommentFormContainer = styled.div`
   display: flex;
   align-items: flex-start;
   gap: 1rem;

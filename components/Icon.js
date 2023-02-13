@@ -1,5 +1,3 @@
-import styled from 'styled-components';
-
 import Reply from '../public/images/icon-reply.svg';
 import Delete from '../public/images/icon-delete.svg';
 import Edit from '../public/images/icon-edit.svg';

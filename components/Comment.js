@@ -2,10 +2,6 @@ import { useState, useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import { UserContext } from '../pages/context/Contexts';
 
-import Reply from '../public/images/icon-reply.svg';
-import Delete from '../public/images/icon-delete.svg';
-import Edit from '../public/images/icon-edit.svg';
-
 import CommentForm from './CommentForm';
 import DeleteModal from './DeleteModal';
 import CommentHeader from './CommentHeader';
@@ -21,28 +17,16 @@ export default function Comment({
   deleteReply,
   parentId,
 }) {
-  const [isVisible, setIsVisible] = useState(false);
-  const [isOwned, setIsOwned] = useState(false);
   const { id, score, username, createdAt, content, replyingTo } = commentData;
   const [user] = useContext(UserContext);
   const [modalOpen, setModalOpen] = useState(false);
-  const [edit, setEdit] = useState(false);
-
-  function toggleVisibility() {
-    setIsVisible(!isVisible);
-  }
+  const [isReplying, setIsReplying] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [isOwned, setIsOwned] = useState(false);
 
   useEffect(() => {
     setIsOwned(user.username == username);
   }, []);
-
-  function deleteRequest() {
-    setModalOpen(true);
-  }
-
-  function editRequest() {
-    setEdit(!edit);
-  }
 
   function deleteConfirmation(confirmation) {
     if (confirmation) {
@@ -54,52 +38,51 @@ export default function Comment({
 
   function submitReply(content) {
     addReply(content, parentId, username);
-    setIsVisible(false);
+    setIsReplying(false);
   }
 
   function submitCommentEdit(content) {
     editComment(content, id);
-    setEdit(false);
+    setIsEditing(false);
   }
 
   function submitReplyEdit(content) {
     editReply(content, id, parentId);
-    setEdit(false);
+    setIsEditing(false);
   }
 
   return (
     <>
-      <CommentStyled>
+      <CommentContainer>
         <Counter score={score} />
-        <CommentContentStyled>
+        <CommentContent>
           <CommentHeader
             username={username}
-            img={`./images/avatars/image-${username}.png`}
             createdAt={createdAt}
-            setVisibility={toggleVisibility}
             isOwner={isOwned}
-            deleteRequest={deleteRequest}
-            editRequest={editRequest}
+            setIsReplying={() => setIsReplying((prev) => !prev)}
+            setIsEditing={() => setIsEditing((prev) => !prev)}
+            deleteRequest={() => setModalOpen(true)}
           />
-          {edit ? (
+          {isEditing ? (
             <EditForm
               text={content}
               id={commentData.id}
               onSubmission={editComment ? submitCommentEdit : submitReplyEdit}
             />
           ) : (
-            <CommentBodyStyled>
+            <CommentText>
               {replyingTo && <span>@{replyingTo}&nbsp;</span>}
               <p>{content}</p>
-            </CommentBodyStyled>
+            </CommentText>
           )}
-        </CommentContentStyled>
-      </CommentStyled>
-      {isVisible && (
+        </CommentContent>
+      </CommentContainer>
+      {isReplying && (
         <CommentForm
           type="reply"
           id={commentData.id}
-          setVisibility={toggleVisibility}
+          setIsReplying={() => setIsReplying((prev) => !prev)}
           onSubmission={submitReply}
         />
       )}
@@ -108,7 +91,7 @@ export default function Comment({
   );
 }
 
-const CommentStyled = styled.div`
+const CommentContainer = styled.div`
   display: flex;
   align-items: flex-start;
   position: relative;
@@ -122,7 +105,7 @@ const CommentStyled = styled.div`
   }
 `;
 
-const CommentContentStyled = styled.div`
+const CommentContent = styled.div`
   display: flex;
   flex-direction: column;
   font-size: 0.9rem;
@@ -136,7 +119,7 @@ const CommentContentStyled = styled.div`
   }
 `;
 
-const CommentBodyStyled = styled.div`
+const CommentText = styled.div`
   padding-top: 1rem;
   p {
     opacity: 0.7;

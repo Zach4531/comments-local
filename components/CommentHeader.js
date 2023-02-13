@@ -4,48 +4,43 @@ import Icon from './Icon';
 
 export default function CommentHeader({
   username,
-  img,
   createdAt,
-  setVisibility,
+  setIsReplying,
+  setIsEditing,
   isOwner,
   deleteRequest,
-  editRequest,
 }) {
-  function handleClick() {
-    setVisibility();
-  }
-
   return (
-    <CardHeaderStyled>
-      <CardUserStyled>
-        <Avatar size="xsmall" img={img} />
+    <CommentHeaderContainer>
+      <CommentUser>
+        <Avatar size="xsmall" img={`./images/avatars/image-${username}.png`} />
         <p className="username">
           {username}
           {isOwner && <span>you</span>}
         </p>
         <p className="date">{createdAt}</p>
-      </CardUserStyled>
-      <CardButtonsStyled>
+      </CommentUser>
+      <CommentButtons>
         {isOwner ? (
           <>
-            <CommentButtonStyled type="delete" onClick={deleteRequest}>
+            <CommentButton type="delete" onClick={deleteRequest}>
               <Icon text="Delete" icon="delete" />
-            </CommentButtonStyled>
-            <CommentButtonStyled onClick={editRequest}>
+            </CommentButton>
+            <CommentButton onClick={setIsEditing}>
               <Icon text="Edit" icon="edit" />
-            </CommentButtonStyled>
+            </CommentButton>
           </>
         ) : (
-          <CommentButtonStyled onClick={handleClick}>
+          <CommentButton onClick={setIsReplying}>
             <Icon text="Reply" icon="reply" />
-          </CommentButtonStyled>
+          </CommentButton>
         )}
-      </CardButtonsStyled>
-    </CardHeaderStyled>
+      </CommentButtons>
+    </CommentHeaderContainer>
   );
 }
 
-const CardButtonsStyled = styled.div`
+const CommentButtons = styled.div`
   display: flex;
   gap: 1rem;
   @media (max-width: 650px) {
@@ -55,7 +50,7 @@ const CardButtonsStyled = styled.div`
   }
 `;
 
-const CommentButtonStyled = styled.button`
+const CommentButton = styled.button`
   display: flex;
   align-items: center;
   font-size: 0.9rem;
@@ -63,8 +58,8 @@ const CommentButtonStyled = styled.button`
   transition: opacity 0.2s ease;
   background-color: transparent;
   border: 0;
-  color: ${(props) =>
-    props.type === 'delete' ? 'hsl(358, 79%, 66%)' : 'hsl(238, 40%, 52%)'};
+  color: ${({ type }) =>
+    type === 'delete' ? 'hsl(358, 79%, 66%)' : 'hsl(238, 40%, 52%)'};
   &:hover {
     opacity: 0.5;
   }
@@ -74,29 +69,28 @@ const CommentButtonStyled = styled.button`
   }
 `;
 
-const CardHeaderStyled = styled.div`
+const CommentHeaderContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex: 1;
 `;
 
-const CardUserStyled = styled.div`
+const CommentUser = styled.div`
   display: flex;
   align-items: center;
   .username {
     font-size: 0.8rem;
     font-weight: bold;
     padding: 0rem 1rem;
-    span {
-      background: hsl(238, 40%, 52%);
-      color: white;
-      padding: 0.1rem;
-      border-radius: 0.2rem;
-      margin-left: 0.2rem;
-    }
   }
-
+  span {
+    background: hsl(238, 40%, 52%);
+    color: white;
+    padding: 0.1rem 0.2rem;
+    border-radius: 0.2rem;
+    margin-left: 0.2rem;
+  }
   .date {
     font-size: 0.8rem;
     opacity: 0.7;
