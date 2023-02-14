@@ -1,5 +1,6 @@
-const DATA_URL = 'http://localhost:3000/api/data.json';
+const DATA_URL = 'http://localhost:3000/api/comments';
 
 export const getComments = async () => {
-  return await fetch(`${DATA_URL}`).then((res) => res.json());
+  const response = await fetch(`${DATA_URL}`);
+  return response.json();
 };

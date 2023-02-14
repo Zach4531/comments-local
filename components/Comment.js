@@ -18,15 +18,15 @@ export default function Comment({
   parentId,
 }) {
   const { id, score, username, createdAt, content, replyingTo } = commentData;
-  const [user] = useContext(UserContext);
+  // const [user] = useContext(UserContext);
   const [modalOpen, setModalOpen] = useState(false);
   const [isReplying, setIsReplying] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [isOwned, setIsOwned] = useState(false);
 
-  useEffect(() => {
-    setIsOwned(user.username == username);
-  }, []);
+  // useEffect(() => {
+  //   setIsOwned(user.username == username);
+  // }, []);
 
   function deleteConfirmation(confirmation) {
     if (confirmation) {

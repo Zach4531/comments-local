@@ -1,10 +1,9 @@
 import Head from 'next/head';
 // import styles from '../styles/Home.module.css'
 import { Fragment, useEffect, useState } from 'react';
-import data from '../public/api/data.json';
 import { getComments } from '../public/api/comments';
-
-import { UserContext } from './context/Contexts';
+import { useQuery } from 'react-query';
+// import { UserContext } from './context/Contexts';
 
 import styled from 'styled-components';
 import CommentForm from '../components/CommentForm';
@@ -13,25 +12,24 @@ import Alert from '../components/Alert';
 
 export default function Home() {
   const [user, setUser] = useState();
-  const [comments, setComments] = useState();
+  // const [comments, setComments] = useState();
   const [alert, setAlert] = useState({});
-  const [c, setC] = useState();
+  // const [c, setC] = useState();
 
-  useEffect(() => {
-    const local = JSON.parse(localStorage.getItem('frontEndComments'));
+  // useEffect(() => {
+  //   const local = JSON.parse(localStorage.getItem('frontEndComments'));
 
-    if (!local) {
-      localStorage.setItem('frontEndComments', JSON.stringify(data));
-    }
+  //   if (!local) {
+  //     localStorage.setItem('frontEndComments', JSON.stringify(data));
+  //   }
 
-    setUser(local?.currentUser || data.currentUser);
-    setComments(local?.comments || data.comments);
-  }, []);
+  //   setUser(local?.currentUser || data.currentUser);
+  //   setComments(local?.comments || data.comments);
+  // }, []);
 
-  useEffect(() => {
-    console.log('getting');
-    getComments().then((data) => setC(JSON.stringify(data.comments)));
-  }, []);
+  const { data: comments, isLoading } = useQuery('comments', getComments);
+
+  console.log(comments);
 
   function updateData(data) {
     setComments(data);
@@ -132,8 +130,12 @@ export default function Home() {
     showAlert('Comment deleted!');
   }
 
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
   return (
-    <UserContext.Provider value={[user, setUser]}>
+    <>
       {comments && (
         <Wrapper>
           {alert.show && <Alert text={alert.text} />}
@@ -163,10 +165,9 @@ export default function Home() {
             </Fragment>
           ))}
           <CommentForm onSubmission={addComment} type="comment" />
-          {c}
         </Wrapper>
       )}
-    </UserContext.Provider>
+    </>
   );
 }
 
