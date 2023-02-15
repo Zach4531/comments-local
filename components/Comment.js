@@ -22,7 +22,7 @@ export default function Comment({
   const [modalOpen, setModalOpen] = useState(false);
   const [isReplying, setIsReplying] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [isOwned, setIsOwned] = useState(false);
+  const [isOwned, setIsOwned] = useState(true);
 
   // useEffect(() => {
   //   setIsOwned(user.username == username);

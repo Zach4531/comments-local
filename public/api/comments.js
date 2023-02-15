@@ -31,3 +31,10 @@ export const addComments = async ({ content, username }) => {
   });
   return response.json();
 };
+
+export const deleteComments = async ({ id }) => {
+  const response = await fetch(`${DATA_URL}/comments/${id}`, {
+    method: 'delete',
+  });
+  return response.json();
+};

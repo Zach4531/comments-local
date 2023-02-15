@@ -1,7 +1,12 @@
 import Head from 'next/head';
 // import styles from '../styles/Home.module.css'
 import { Fragment, useEffect, useState } from 'react';
-import { getComments, addComments, getUser } from '../public/api/comments';
+import {
+  getComments,
+  addComments,
+  getUser,
+  deleteComments,
+} from '../public/api/comments';
 import {
   QueryClient,
   useMutation,
@@ -45,11 +50,20 @@ export default function Home() {
     },
   });
 
+  const deleteMutaion = useMutation(deleteComments, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('comments');
+    },
+  });
+
+  function deleteComment(id) {
+    console.log('deleting');
+    deleteMutaion.mutate({ id: id });
+  }
+
   function addComment(content) {
     addMutaion.mutate({ content: content, username: user.username });
   }
-  console.log('dol');
-  console.log(comments);
 
   function updateData(data) {
     setComments(data);
@@ -127,13 +141,13 @@ export default function Home() {
     showAlert('Comment successfully updated!');
   }
 
-  function deleteComment(id) {
-    const commentsUpdated = comments.filter((comment) => {
-      return comment.id !== id;
-    });
-    updateData(commentsUpdated);
-    showAlert('Comment deleted!');
-  }
+  // function deleteComment(id) {
+  //   const commentsUpdated = comments.filter((comment) => {
+  //     return comment.id !== id;
+  //   });
+  //   updateData(commentsUpdated);
+  //   showAlert('Comment deleted!');
+  // }
 
   function deleteReply(id, parentId) {
     const commentsUpdated = comments.map((comment) => {
