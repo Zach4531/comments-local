@@ -1,8 +1,13 @@
 import Head from 'next/head';
 // import styles from '../styles/Home.module.css'
 import { Fragment, useEffect, useState } from 'react';
-import { getComments } from '../public/api/comments';
-import { useQuery } from 'react-query';
+import { getComments, addComments, getUser } from '../public/api/comments';
+import {
+  QueryClient,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from 'react-query';
 // import { UserContext } from './context/Contexts';
 
 import styled from 'styled-components';
@@ -11,9 +16,10 @@ import Comment from '../components/Comment';
 import Alert from '../components/Alert';
 
 export default function Home() {
-  const [user, setUser] = useState();
+  // const [user, setUser] = useState();
   // const [comments, setComments] = useState();
   const [alert, setAlert] = useState({});
+  const queryClient = useQueryClient();
   // const [c, setC] = useState();
 
   // useEffect(() => {
@@ -27,8 +33,22 @@ export default function Home() {
   //   setComments(local?.comments || data.comments);
   // }, []);
 
-  const { data: comments, isLoading } = useQuery('comments', getComments);
+  const { data: comments, isLoading: commentsLoading } = useQuery(
+    'comments',
+    getComments
+  );
+  const { data: user, isLoading: userLoading } = useQuery('user', getUser);
 
+  const addMutaion = useMutation(addComments, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('comments');
+    },
+  });
+
+  function addComment(content) {
+    addMutaion.mutate({ content: content, username: user.username });
+  }
+  console.log('dol');
   console.log(comments);
 
   function updateData(data) {
@@ -46,18 +66,18 @@ export default function Home() {
     }, '4000');
   }
 
-  function addComment(content) {
-    const newComment = {
-      id: Math.floor(Math.random() * 1000) + 5,
-      content: content,
-      createdAt: '3 weeks ago',
-      score: 0,
-      username: user.username,
-      replies: [],
-    };
-    const commentsUpdated = [...comments, newComment];
-    updateData(commentsUpdated);
-  }
+  // function addComment(content) {
+  //   const newComment = {
+  //     id: Math.floor(Math.random() * 1000) + 5,
+  //     content: content,
+  //     createdAt: '3 weeks ago',
+  //     score: 0,
+  //     username: user.username,
+  //     replies: [],
+  //   };
+  //   const commentsUpdated = [...comments, newComment];
+  //   updateData(commentsUpdated);
+  // }
 
   function addReply(content, id, replyingTo) {
     const newReply = {
@@ -130,7 +150,7 @@ export default function Home() {
     showAlert('Comment deleted!');
   }
 
-  if (isLoading) {
+  if (commentsLoading) {
     return <div>Loading...</div>;
   }
 
