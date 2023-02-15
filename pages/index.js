@@ -20,6 +20,7 @@ import CommentForm from '../components/CommentForm';
 import Comment from '../components/Comment';
 import Alert from '../components/Alert';
 import Loader from '../components/Loader';
+import { COOKIE_NAME_PRERENDER_BYPASS } from 'next/dist/server/api-utils';
 
 export default function Home() {
   const [alert, setAlert] = useState({});
@@ -33,6 +34,16 @@ export default function Home() {
   //     username: user.username,
   //     replies: [],
   //   };
+  const CommentObj = {
+    id: Math.floor(Math.random() * 1000) + 5,
+    createdAt: new Date().toLocaleDateString('en-us', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    }),
+    score: 0,
+    replies: [],
+  };
 
   const { data: comments, isLoading: commentsLoading } = useQuery(
     'comments',
@@ -67,7 +78,26 @@ export default function Home() {
   }
 
   function addComment(content) {
-    addMutaion.mutate({ content: content, username: user.username });
+    const newComment = Object.assign(CommentObj, {
+      content: content,
+      username: user.username,
+    });
+    addMutaion.mutate({ content: newComment });
+  }
+
+  function addReply(content, parentComment) {
+    const newReply = Object.assign(CommentObj, {
+      content: content,
+      username: user.username,
+      replyingTo: parentComment.username,
+    });
+    updateMutaion.mutate({
+      id: parentComment.id,
+      content: {
+        ...parentComment,
+        replies: [...parentComment.replies, newReply],
+      },
+    });
   }
 
   function deleteComment(id) {
@@ -87,25 +117,6 @@ export default function Home() {
     setTimeout(() => {
       setAlert({ show: false, text: '' });
     }, '4000');
-  }
-
-  function addReply(content, id, replyingTo) {
-    const newReply = {
-      id: Math.floor(Math.random() * 1000) + 5,
-      content: content,
-      createdAt: '3 weeks ago',
-      score: 0,
-      replyingTo: replyingTo,
-      username: user.username,
-    };
-
-    const commentsUpdated = comments.map((comment) => {
-      if (comment.id === id) {
-        comment.replies = [...comment.replies, newReply];
-      }
-      return comment;
-    });
-    updateData(commentsUpdated);
   }
 
   function editReply(content, id, parentId) {
@@ -168,7 +179,6 @@ export default function Home() {
                       commentData={reply}
                       deleteReply={deleteReply}
                       editReply={editReply}
-                      parentId={comment.id}
                     />
                   ))}
                 </ReplyWrapperStyled>

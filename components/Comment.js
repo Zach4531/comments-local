@@ -10,19 +10,19 @@ import EditForm from './EditForm';
 
 export default function Comment({
   commentData,
+  parentCommentData,
   addReply,
   editComment,
   editReply,
   deleteComment,
   deleteReply,
-  parentId,
 }) {
   const { id, score, username, createdAt, content, replyingTo } = commentData;
   // const [user] = useContext(UserContext);
   const [modalOpen, setModalOpen] = useState(false);
   const [isReplying, setIsReplying] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [isOwned, setIsOwned] = useState(true);
+  const [isOwned, setIsOwned] = useState(false);
 
   // useEffect(() => {
   //   setIsOwned(user.username == username);
@@ -37,7 +37,7 @@ export default function Comment({
   }
 
   function submitReply(content) {
-    addReply(content, parentId, username);
+    addReply(content, commentData);
     setIsReplying(false);
   }
 

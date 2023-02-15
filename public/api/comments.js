@@ -10,24 +10,13 @@ export const getUser = async () => {
   return response.json();
 };
 
-export const addComments = async ({ content, username }) => {
-  const response = await fetch(`${DATA_URL}/comments`, {
+export const addComments = async (content) => {
+  const response = await fetch(`${DATA_URL}/comments/${id}`, {
     method: 'post',
     headers: {
       'Content-type': 'application/json; charset=UTF-8',
     },
-    body: JSON.stringify({
-      id: Math.floor(Math.random() * 1000) + 5,
-      content: content,
-      createdAt: new Date().toLocaleDateString('en-us', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-      }),
-      score: 0,
-      username: username,
-      replies: [],
-    }),
+    body: JSON.stringify(content),
   });
   return response.json();
 };
