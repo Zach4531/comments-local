@@ -42,7 +42,7 @@ export default function Comment({
   }
 
   function submitCommentEdit(content) {
-    editComment(content, id);
+    editComment(id, { ...commentData, content: content });
     setIsEditing(false);
   }
 

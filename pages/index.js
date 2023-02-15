@@ -6,6 +6,7 @@ import {
   addComments,
   getUser,
   deleteComments,
+  updateComments,
 } from '../public/api/comments';
 import {
   QueryClient,
@@ -13,7 +14,6 @@ import {
   useQuery,
   useQueryClient,
 } from 'react-query';
-// import { UserContext } from './context/Contexts';
 
 import styled from 'styled-components';
 import CommentForm from '../components/CommentForm';
@@ -22,48 +22,56 @@ import Alert from '../components/Alert';
 import Loader from '../components/Loader';
 
 export default function Home() {
-  // const [user, setUser] = useState();
-  // const [comments, setComments] = useState();
   const [alert, setAlert] = useState({});
   const queryClient = useQueryClient();
-  // const [c, setC] = useState();
 
-  // useEffect(() => {
-  //   const local = JSON.parse(localStorage.getItem('frontEndComments'));
-
-  //   if (!local) {
-  //     localStorage.setItem('frontEndComments', JSON.stringify(data));
-  //   }
-
-  //   setUser(local?.currentUser || data.currentUser);
-  //   setComments(local?.comments || data.comments);
-  // }, []);
+  //   const newComment = {
+  //     id: Math.floor(Math.random() * 1000) + 5,
+  //     content: content,
+  //     createdAt: '3 weeks ago',
+  //     score: 0,
+  //     username: user.username,
+  //     replies: [],
+  //   };
 
   const { data: comments, isLoading: commentsLoading } = useQuery(
     'comments',
     getComments
   );
+
   const { data: user, isLoading: userLoading } = useQuery('user', getUser);
 
   const addMutaion = useMutation(addComments, {
     onSuccess: () => {
       queryClient.invalidateQueries('comments');
+      showAlert('Comment successfully added!');
+    },
+  });
+
+  const updateMutaion = useMutation(updateComments, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('comments');
+      showAlert('Comment successfully updated!');
     },
   });
 
   const deleteMutaion = useMutation(deleteComments, {
     onSuccess: () => {
       queryClient.invalidateQueries('comments');
+      showAlert('Comment successfully deleted!');
     },
   });
 
-  function deleteComment(id) {
-    console.log('deleting');
-    deleteMutaion.mutate({ id: id });
+  function updateComment(id, content) {
+    updateMutaion.mutate({ id: id, content: content });
   }
 
   function addComment(content) {
     addMutaion.mutate({ content: content, username: user.username });
+  }
+
+  function deleteComment(id) {
+    deleteMutaion.mutate({ id: id });
   }
 
   function updateData(data) {
@@ -80,19 +88,6 @@ export default function Home() {
       setAlert({ show: false, text: '' });
     }, '4000');
   }
-
-  // function addComment(content) {
-  //   const newComment = {
-  //     id: Math.floor(Math.random() * 1000) + 5,
-  //     content: content,
-  //     createdAt: '3 weeks ago',
-  //     score: 0,
-  //     username: user.username,
-  //     replies: [],
-  //   };
-  //   const commentsUpdated = [...comments, newComment];
-  //   updateData(commentsUpdated);
-  // }
 
   function addReply(content, id, replyingTo) {
     const newReply = {
@@ -113,17 +108,6 @@ export default function Home() {
     updateData(commentsUpdated);
   }
 
-  function editComment(content, id) {
-    const commentsUpdated = comments.map((comment) => {
-      if (comment.id === id) {
-        comment.content = content;
-      }
-      return comment;
-    });
-    updateData(commentsUpdated);
-    showAlert('Comment successfully updated!');
-  }
-
   function editReply(content, id, parentId) {
     const commentsUpdated = comments.map((comment) => {
       if (comment.id === parentId) {
@@ -141,14 +125,6 @@ export default function Home() {
     updateData(commentsUpdated);
     showAlert('Comment successfully updated!');
   }
-
-  // function deleteComment(id) {
-  //   const commentsUpdated = comments.filter((comment) => {
-  //     return comment.id !== id;
-  //   });
-  //   updateData(commentsUpdated);
-  //   showAlert('Comment deleted!');
-  // }
 
   function deleteReply(id, parentId) {
     const commentsUpdated = comments.map((comment) => {
@@ -180,7 +156,7 @@ export default function Home() {
                 key={comment.id}
                 commentData={comment}
                 addReply={addReply}
-                editComment={editComment}
+                editComment={updateComment}
                 deleteComment={deleteComment}
                 parentId={comment.id}
               />

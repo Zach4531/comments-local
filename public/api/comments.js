@@ -32,6 +32,17 @@ export const addComments = async ({ content, username }) => {
   return response.json();
 };
 
+export const updateComments = async ({ id, content }) => {
+  const response = await fetch(`${DATA_URL}/comments/${id}`, {
+    method: 'put',
+    headers: {
+      'Content-type': 'application/json; charset=UTF-8',
+    },
+    body: JSON.stringify(content),
+  });
+  return response.json();
+};
+
 export const deleteComments = async ({ id }) => {
   const response = await fetch(`${DATA_URL}/comments/${id}`, {
     method: 'delete',
