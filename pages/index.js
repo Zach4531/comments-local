@@ -19,6 +19,7 @@ import styled from 'styled-components';
 import CommentForm from '../components/CommentForm';
 import Comment from '../components/Comment';
 import Alert from '../components/Alert';
+import Loader from '../components/Loader';
 
 export default function Home() {
   // const [user, setUser] = useState();
@@ -164,8 +165,8 @@ export default function Home() {
     showAlert('Comment deleted!');
   }
 
-  if (commentsLoading) {
-    return <div>Loading...</div>;
+  if (commentsLoading || userLoading) {
+    return <Loader />;
   }
 
   return (
