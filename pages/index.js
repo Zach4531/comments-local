@@ -79,6 +79,13 @@ export default function Home() {
     },
   });
 
+  const deleteReplyMutaion = useMutation(updateComments, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('comments');
+      showAlert('Reply successfully deleted!');
+    },
+  });
+
   function updateComment(id, content) {
     updateMutaion.mutate({ id: id, content: content });
   }
@@ -88,7 +95,7 @@ export default function Home() {
       content: content,
       username: user.username,
     });
-    addMutaion.mutate({ content: newComment });
+    addMutaion.mutate(newComment);
   }
 
   function addReply(content, parentComment) {
@@ -110,33 +117,27 @@ export default function Home() {
     deleteMutaion.mutate({ id: id });
   }
 
+  function deleteReply(parentComment) {
+    deleteReplyMutaion.mutate({
+      id: parentComment.id,
+      content: {
+        ...parentComment,
+      },
+    });
+  }
+
   function editReply(content, replyData, parentComment) {
     const newReply = Object.assign(replyData, {
       content: content,
     });
-    console.log(newReply);
-    // addReplyMutaion.mutate({
-    //   id: parentComment.id,
-    //   content: {
-    //     ...parentComment,
-    //     replies: [...parentComment.replies, newReply],
-    //   },
-    // });
-  }
 
-  function deleteReply(id, parentId) {
-    const commentsUpdated = comments.map((comment) => {
-      if (comment.id === parentId) {
-        if (comment.replies.length > 0) {
-          comment.replies = comment.replies.filter((reply) => {
-            return reply.id !== id;
-          });
-        }
-      }
-      return comment;
+    updateReplyMutaion.mutate({
+      id: parentComment.id,
+      content: {
+        ...parentComment,
+        replies: [...parentComment.replies, newReply],
+      },
     });
-    updateData(commentsUpdated);
-    showAlert('Comment deleted!');
   }
 
   function showAlert(text) {

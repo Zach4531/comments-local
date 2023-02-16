@@ -11,7 +11,7 @@ export const getUser = async () => {
 };
 
 export const addComments = async (content) => {
-  const response = await fetch(`${DATA_URL}/comments/${id}`, {
+  const response = await fetch(`${DATA_URL}/comments`, {
     method: 'post',
     headers: {
       'Content-type': 'application/json; charset=UTF-8',

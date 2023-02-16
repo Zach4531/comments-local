@@ -30,7 +30,7 @@ export default function Comment({
 
   function deleteConfirmation(confirmation) {
     if (confirmation) {
-      deleteComment ? deleteComment(id) : deleteReply(id, parentId);
+      deleteComment ? deleteComment(id) : handleDeleteReply();
     } else {
       setModalOpen(false);
     }
@@ -46,7 +46,19 @@ export default function Comment({
     setIsEditing(false);
   }
 
+  function handleDeleteReply() {
+    parentCommentData.replies = parentCommentData.replies.filter((reply) => {
+      return reply.id !== commentData.id;
+    });
+
+    deleteReply(parentCommentData);
+  }
+
   function submitReplyEdit(content) {
+    parentCommentData.replies = parentCommentData.replies.filter((reply) => {
+      return reply.id !== commentData.id;
+    });
+
     editReply(content, commentData, parentCommentData);
     setIsEditing(false);
   }
