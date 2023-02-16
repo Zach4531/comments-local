@@ -1,12 +1,12 @@
 import { useState, useContext, useEffect } from 'react';
 import styled from 'styled-components';
-import { UserContext } from '../pages/context/Contexts';
 
 import CommentForm from './CommentForm';
 import DeleteModal from './DeleteModal';
 import CommentHeader from './CommentHeader';
 import Counter from './Counter';
 import EditForm from './EditForm';
+import { UserContext } from '../public/context/UserContext';
 
 export default function Comment({
   commentData,
@@ -18,15 +18,15 @@ export default function Comment({
   deleteReply,
 }) {
   const { id, score, username, createdAt, content, replyingTo } = commentData;
-  // const [user] = useContext(UserContext);
+  const currentUser = useContext(UserContext);
   const [modalOpen, setModalOpen] = useState(false);
   const [isReplying, setIsReplying] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [isOwned, setIsOwned] = useState(true);
 
-  // useEffect(() => {
-  //   setIsOwned(user.username == username);
-  // }, []);
+  useEffect(() => {
+    setIsOwned(currentUser.username == username);
+  }, []);
 
   function deleteConfirmation(confirmation) {
     if (confirmation) {

@@ -1,26 +1,19 @@
-import Head from 'next/head';
-// import styles from '../styles/Home.module.css'
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useState } from 'react';
 import {
   getComments,
   addComments,
-  getUser,
   deleteComments,
   updateComments,
+  getUser,
 } from '../public/api/comments';
-import {
-  QueryClient,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 
 import styled from 'styled-components';
 import CommentForm from '../components/CommentForm';
 import Comment from '../components/Comment';
 import Alert from '../components/Alert';
 import Loader from '../components/Loader';
-import { COOKIE_NAME_PRERENDER_BYPASS } from 'next/dist/server/api-utils';
+import { UserContext } from '../public/context/UserContext';
 
 export default function Home() {
   const [alert, setAlert] = useState({});
@@ -152,7 +145,7 @@ export default function Home() {
   }
 
   return (
-    <>
+    <UserContext.Provider value={user}>
       {comments && (
         <Wrapper>
           {alert.show && <Alert text={alert.text} />}
@@ -184,7 +177,7 @@ export default function Home() {
           <CommentForm onSubmission={addComment} type="comment" />
         </Wrapper>
       )}
-    </>
+    </UserContext.Provider>
   );
 }
 
