@@ -1,44 +1,136 @@
-import Head from 'next/head';
-// import styles from '../styles/Home.module.css'
-import { Fragment, useEffect, useState } from 'react';
-import data from '../public/api/data.json';
-import { getComments } from '../public/api/comments';
-
-import { UserContext } from './context/Contexts';
+import { Fragment, useState } from 'react';
+import {
+  getComments,
+  addComments,
+  deleteComments,
+  updateComments,
+  getUser,
+} from '../public/api/comments';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 
 import styled from 'styled-components';
 import CommentForm from '../components/CommentForm';
 import Comment from '../components/Comment';
 import Alert from '../components/Alert';
+import Loader from '../components/Loader';
+import { UserContext } from '../public/context/UserContext';
 
 export default function Home() {
-  const [user, setUser] = useState();
-  const [comments, setComments] = useState();
   const [alert, setAlert] = useState({});
-  const [c, setC] = useState();
+  const queryClient = useQueryClient();
 
-  useEffect(() => {
-    const local = JSON.parse(localStorage.getItem('frontEndComments'));
+  const CommentObj = {
+    id: Math.floor(Math.random() * 1000) + 5,
+    createdAt: new Date().toLocaleDateString('en-us', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    }),
+    score: 0,
+    replies: [],
+  };
 
-    if (!local) {
-      localStorage.setItem('frontEndComments', JSON.stringify(data));
-    }
+  const { data: comments, isLoading: commentsLoading } = useQuery(
+    'comments',
+    getComments
+  );
 
-    setUser(local?.currentUser || data.currentUser);
-    setComments(local?.comments || data.comments);
-  }, []);
+  const { data: user, isLoading: userLoading } = useQuery('user', getUser);
 
-  useEffect(() => {
-    console.log('getting');
-    getComments().then((data) => setC(JSON.stringify(data.comments)));
-  }, []);
+  const addMutaion = useMutation(addComments, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('comments');
+      showAlert('Comment successfully added!');
+    },
+  });
 
-  function updateData(data) {
-    setComments(data);
-    localStorage.setItem(
-      'frontEndComments',
-      JSON.stringify({ currentUser: user, comments: data })
-    );
+  const addReplyMutaion = useMutation(updateComments, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('comments');
+      showAlert('Reply successfully added!');
+    },
+  });
+
+  const updateReplyMutaion = useMutation(updateComments, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('comments');
+      showAlert('Reply successfully updated!');
+    },
+  });
+
+  const updateMutaion = useMutation(updateComments, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('comments');
+      showAlert('Comment successfully updated!');
+    },
+  });
+
+  const deleteMutaion = useMutation(deleteComments, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('comments');
+      showAlert('Comment successfully deleted!');
+    },
+  });
+
+  const deleteReplyMutaion = useMutation(updateComments, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('comments');
+      showAlert('Reply successfully deleted!');
+    },
+  });
+
+  function updateComment(id, content) {
+    updateMutaion.mutate({ id: id, content: content });
+  }
+
+  function addComment(content) {
+    const newComment = Object.assign(CommentObj, {
+      content: content,
+      username: user.username,
+    });
+    addMutaion.mutate(newComment);
+  }
+
+  function addReply(content, parentComment) {
+    const newReply = Object.assign(CommentObj, {
+      content: content,
+      username: user.username,
+      replyingTo: parentComment.username,
+    });
+    addReplyMutaion.mutate({
+      id: parentComment.id,
+      content: {
+        ...parentComment,
+        replies: [...parentComment.replies, newReply],
+      },
+    });
+  }
+
+  function deleteComment(id) {
+    deleteMutaion.mutate({ id: id });
+  }
+
+  function deleteReply(parentComment) {
+    deleteReplyMutaion.mutate({
+      id: parentComment.id,
+      content: {
+        ...parentComment,
+      },
+    });
+  }
+
+  function editReply(content, replyData, parentComment) {
+    const newReply = Object.assign(replyData, {
+      content: content,
+    });
+
+    updateReplyMutaion.mutate({
+      id: parentComment.id,
+      content: {
+        ...parentComment,
+        replies: [...parentComment.replies, newReply],
+      },
+    });
   }
 
   function showAlert(text) {
@@ -48,92 +140,12 @@ export default function Home() {
     }, '4000');
   }
 
-  function addComment(content) {
-    const newComment = {
-      id: Math.floor(Math.random() * 1000) + 5,
-      content: content,
-      createdAt: '3 weeks ago',
-      score: 0,
-      username: user.username,
-      replies: [],
-    };
-    const commentsUpdated = [...comments, newComment];
-    updateData(commentsUpdated);
-  }
-
-  function addReply(content, id, replyingTo) {
-    const newReply = {
-      id: Math.floor(Math.random() * 1000) + 5,
-      content: content,
-      createdAt: '3 weeks ago',
-      score: 0,
-      replyingTo: replyingTo,
-      username: user.username,
-    };
-
-    const commentsUpdated = comments.map((comment) => {
-      if (comment.id === id) {
-        comment.replies = [...comment.replies, newReply];
-      }
-      return comment;
-    });
-    updateData(commentsUpdated);
-  }
-
-  function editComment(content, id) {
-    const commentsUpdated = comments.map((comment) => {
-      if (comment.id === id) {
-        comment.content = content;
-      }
-      return comment;
-    });
-    updateData(commentsUpdated);
-    showAlert('Comment successfully updated!');
-  }
-
-  function editReply(content, id, parentId) {
-    const commentsUpdated = comments.map((comment) => {
-      if (comment.id === parentId) {
-        if (comment.replies.length > 0) {
-          comment.replies.map((reply) => {
-            if (reply.id === id) {
-              reply.content = content;
-            }
-            return reply;
-          });
-        }
-      }
-      return comment;
-    });
-    updateData(commentsUpdated);
-    showAlert('Comment successfully updated!');
-  }
-
-  function deleteComment(id) {
-    const commentsUpdated = comments.filter((comment) => {
-      return comment.id !== id;
-    });
-    updateData(commentsUpdated);
-    showAlert('Comment deleted!');
-  }
-
-  function deleteReply(id, parentId) {
-    const commentsUpdated = comments.map((comment) => {
-      if (comment.id === parentId) {
-        if (comment.replies.length > 0) {
-          comment.replies = comment.replies.filter((reply) => {
-            return reply.id !== id;
-          });
-        }
-      }
-      return comment;
-    });
-    updateData(commentsUpdated);
-    showAlert('Comment deleted!');
+  if (commentsLoading || userLoading) {
+    return <Loader />;
   }
 
   return (
-    <UserContext.Provider value={[user, setUser]}>
+    <UserContext.Provider value={user}>
       {comments && (
         <Wrapper>
           {alert.show && <Alert text={alert.text} />}
@@ -143,7 +155,7 @@ export default function Home() {
                 key={comment.id}
                 commentData={comment}
                 addReply={addReply}
-                editComment={editComment}
+                editComment={updateComment}
                 deleteComment={deleteComment}
                 parentId={comment.id}
               />
@@ -153,9 +165,9 @@ export default function Home() {
                     <Comment
                       key={`${comment.id}-${reply.id}`}
                       commentData={reply}
+                      parentCommentData={comment}
                       deleteReply={deleteReply}
                       editReply={editReply}
-                      parentId={comment.id}
                     />
                   ))}
                 </ReplyWrapperStyled>
@@ -163,7 +175,6 @@ export default function Home() {
             </Fragment>
           ))}
           <CommentForm onSubmission={addComment} type="comment" />
-          {c}
         </Wrapper>
       )}
     </UserContext.Provider>

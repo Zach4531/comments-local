@@ -1,53 +1,65 @@
 import { useState, useContext, useEffect } from 'react';
 import styled from 'styled-components';
-import { UserContext } from '../pages/context/Contexts';
 
 import CommentForm from './CommentForm';
 import DeleteModal from './DeleteModal';
 import CommentHeader from './CommentHeader';
 import Counter from './Counter';
 import EditForm from './EditForm';
+import { UserContext } from '../public/context/UserContext';
 
 export default function Comment({
   commentData,
+  parentCommentData,
   addReply,
   editComment,
   editReply,
   deleteComment,
   deleteReply,
-  parentId,
 }) {
   const { id, score, username, createdAt, content, replyingTo } = commentData;
-  const [user] = useContext(UserContext);
+  const currentUser = useContext(UserContext);
   const [modalOpen, setModalOpen] = useState(false);
   const [isReplying, setIsReplying] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [isOwned, setIsOwned] = useState(false);
+  const [isOwned, setIsOwned] = useState(true);
 
   useEffect(() => {
-    setIsOwned(user.username == username);
+    setIsOwned(currentUser.username == username);
   }, []);
 
   function deleteConfirmation(confirmation) {
     if (confirmation) {
-      deleteComment ? deleteComment(id) : deleteReply(id, parentId);
+      deleteComment ? deleteComment(id) : handleDeleteReply();
     } else {
       setModalOpen(false);
     }
   }
 
   function submitReply(content) {
-    addReply(content, parentId, username);
+    addReply(content, commentData);
     setIsReplying(false);
   }
 
   function submitCommentEdit(content) {
-    editComment(content, id);
+    editComment(id, { ...commentData, content: content });
     setIsEditing(false);
   }
 
+  function handleDeleteReply() {
+    parentCommentData.replies = parentCommentData.replies.filter((reply) => {
+      return reply.id !== commentData.id;
+    });
+
+    deleteReply(parentCommentData);
+  }
+
   function submitReplyEdit(content) {
-    editReply(content, id, parentId);
+    parentCommentData.replies = parentCommentData.replies.filter((reply) => {
+      return reply.id !== commentData.id;
+    });
+
+    editReply(content, commentData, parentCommentData);
     setIsEditing(false);
   }
 

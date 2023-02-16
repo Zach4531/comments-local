@@ -3,9 +3,11 @@ import { useState } from 'react';
 import UserLogin from '../components/UserLogin';
 import Head from 'next/head';
 import styled from 'styled-components';
+import { QueryClient, QueryClientProvider } from 'react-query';
 
 function MyApp({ Component, pageProps }) {
   const [login, setLogin] = useState(true);
+  const queryClient = new QueryClient();
 
   function authenticateUser() {
     setLogin(true);
@@ -19,7 +21,9 @@ function MyApp({ Component, pageProps }) {
         ></script>
       </Head>
       {login ? (
-        <Component {...pageProps} />
+        <QueryClientProvider client={queryClient}>
+          <Component {...pageProps} />
+        </QueryClientProvider>
       ) : (
         <Container>
           <UserLogin authenticate={authenticateUser} />
