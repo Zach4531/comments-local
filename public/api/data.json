@@ -13,7 +13,17 @@
       "createdAt": "1 month ago",
       "score": 12,
       "username": "amyrobson",
-      "replies": []
+      "replies": [
+        {
+          "id": 731,
+          "createdAt": "Feb 15, 2023",
+          "score": 0,
+          "replies": [],
+          "content": "sfgsfg",
+          "username": "juliusomo",
+          "replyingTo": "amyrobson"
+        }
+      ]
     },
     {
       "id": 2,
@@ -24,7 +34,7 @@
       "replies": [
         {
           "id": 3,
-          "content": "If you're still new, I'd recommend focusing on the fundamentals of HTML, CSS, and JS before considering React. It's very tempting to jump ahead but lay a solid foundation first.",
+          "content": "If you're still new, I'd recommend focusing on the fundamentals of HTML, CSS, and JS before considering React. It's very tempting to jump ahead but lay a solid foundation first.g",
           "createdAt": "1 week ago",
           "score": 4,
           "replyingTo": "maxblagun",
@@ -37,6 +47,23 @@
           "score": 2,
           "replyingTo": "ramsesmiron",
           "username": "juliusomo"
+        },
+        {
+          "id": 585,
+          "createdAt": "Feb 15, 2023",
+          "score": 0,
+          "replies": [],
+          "content": "fgfdsg",
+          "username": "juliusomo",
+          "replyingTo": "maxblagun"
+        },
+        {
+          "id": 3,
+          "content": "If you're still new, I'd recommend focusing on the fundamentals of HTML, CSS, and JS before considering React. It's very tempting to jump ahead but lay a solid foundation first.g",
+          "createdAt": "1 week ago",
+          "score": 4,
+          "replyingTo": "maxblagun",
+          "username": "ramsesmiron"
         }
       ]
     },

@@ -26,14 +26,6 @@ export default function Home() {
   const [alert, setAlert] = useState({});
   const queryClient = useQueryClient();
 
-  //   const newComment = {
-  //     id: Math.floor(Math.random() * 1000) + 5,
-  //     content: content,
-  //     createdAt: '3 weeks ago',
-  //     score: 0,
-  //     username: user.username,
-  //     replies: [],
-  //   };
   const CommentObj = {
     id: Math.floor(Math.random() * 1000) + 5,
     createdAt: new Date().toLocaleDateString('en-us', {
@@ -56,6 +48,20 @@ export default function Home() {
     onSuccess: () => {
       queryClient.invalidateQueries('comments');
       showAlert('Comment successfully added!');
+    },
+  });
+
+  const addReplyMutaion = useMutation(updateComments, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('comments');
+      showAlert('Reply successfully added!');
+    },
+  });
+
+  const updateReplyMutaion = useMutation(updateComments, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('comments');
+      showAlert('Reply successfully updated!');
     },
   });
 
@@ -91,7 +97,7 @@ export default function Home() {
       username: user.username,
       replyingTo: parentComment.username,
     });
-    updateMutaion.mutate({
+    addReplyMutaion.mutate({
       id: parentComment.id,
       content: {
         ...parentComment,
@@ -104,37 +110,18 @@ export default function Home() {
     deleteMutaion.mutate({ id: id });
   }
 
-  function updateData(data) {
-    setComments(data);
-    localStorage.setItem(
-      'frontEndComments',
-      JSON.stringify({ currentUser: user, comments: data })
-    );
-  }
-
-  function showAlert(text) {
-    setAlert({ show: true, text: text });
-    setTimeout(() => {
-      setAlert({ show: false, text: '' });
-    }, '4000');
-  }
-
-  function editReply(content, id, parentId) {
-    const commentsUpdated = comments.map((comment) => {
-      if (comment.id === parentId) {
-        if (comment.replies.length > 0) {
-          comment.replies.map((reply) => {
-            if (reply.id === id) {
-              reply.content = content;
-            }
-            return reply;
-          });
-        }
-      }
-      return comment;
+  function editReply(content, replyData, parentComment) {
+    const newReply = Object.assign(replyData, {
+      content: content,
     });
-    updateData(commentsUpdated);
-    showAlert('Comment successfully updated!');
+    console.log(newReply);
+    // addReplyMutaion.mutate({
+    //   id: parentComment.id,
+    //   content: {
+    //     ...parentComment,
+    //     replies: [...parentComment.replies, newReply],
+    //   },
+    // });
   }
 
   function deleteReply(id, parentId) {
@@ -150,6 +137,13 @@ export default function Home() {
     });
     updateData(commentsUpdated);
     showAlert('Comment deleted!');
+  }
+
+  function showAlert(text) {
+    setAlert({ show: true, text: text });
+    setTimeout(() => {
+      setAlert({ show: false, text: '' });
+    }, '4000');
   }
 
   if (commentsLoading || userLoading) {
@@ -177,6 +171,7 @@ export default function Home() {
                     <Comment
                       key={`${comment.id}-${reply.id}`}
                       commentData={reply}
+                      parentCommentData={comment}
                       deleteReply={deleteReply}
                       editReply={editReply}
                     />
