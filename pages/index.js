@@ -1,10 +1,13 @@
 import { Fragment, useState } from 'react';
 import {
   getComments,
-  addComments,
-  deleteComments,
-  updateComments,
   getUser,
+  addComments,
+  addReplies,
+  updateComments,
+  updateReplies,
+  deleteComments,
+  deleteReplies,
 } from '../public/api/comments';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
@@ -27,7 +30,6 @@ export default function Home() {
       day: 'numeric',
     }),
     score: 0,
-    replies: [],
   };
 
   const { data: comments, isLoading: commentsLoading } = useQuery(
@@ -37,100 +39,80 @@ export default function Home() {
 
   const { data: user, isLoading: userLoading } = useQuery('user', getUser);
 
-  const addMutaion = useMutation(addComments, {
+  const addCommentMutaion = useMutation(addComments, {
     onSuccess: () => {
       queryClient.invalidateQueries('comments');
       showAlert('Comment successfully added!');
     },
   });
 
-  const addReplyMutaion = useMutation(updateComments, {
-    onSuccess: () => {
-      queryClient.invalidateQueries('comments');
-      showAlert('Reply successfully added!');
-    },
-  });
-
-  const updateReplyMutaion = useMutation(updateComments, {
-    onSuccess: () => {
-      queryClient.invalidateQueries('comments');
-      showAlert('Reply successfully updated!');
-    },
-  });
-
-  const updateMutaion = useMutation(updateComments, {
+  const updateCommentMutaion = useMutation(updateComments, {
     onSuccess: () => {
       queryClient.invalidateQueries('comments');
       showAlert('Comment successfully updated!');
     },
   });
 
-  const deleteMutaion = useMutation(deleteComments, {
+  const addReplyMutaion = useMutation(addReplies, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('comments');
+      showAlert('Reply successfully added!');
+    },
+  });
+
+  const updateReplyMutaion = useMutation(updateReplies, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('comments');
+      showAlert('Reply successfully updated!');
+    },
+  });
+
+  const deleteCommentMutaion = useMutation(deleteComments, {
     onSuccess: () => {
       queryClient.invalidateQueries('comments');
       showAlert('Comment successfully deleted!');
     },
   });
 
-  const deleteReplyMutaion = useMutation(updateComments, {
+  const deleteReplyMutaion = useMutation(deleteReplies, {
     onSuccess: () => {
       queryClient.invalidateQueries('comments');
       showAlert('Reply successfully deleted!');
     },
   });
 
-  function updateComment(id, content) {
-    updateMutaion.mutate({ id: id, content: content });
-  }
-
   function addComment(content) {
     const newComment = Object.assign(CommentObj, {
       content: content,
       username: user.username,
     });
-    addMutaion.mutate(newComment);
+    addCommentMutaion.mutate(newComment);
   }
 
   function addReply(content, parentComment) {
     const newReply = Object.assign(CommentObj, {
+      commentId: parentComment.id,
       content: content,
       username: user.username,
-      replyingTo: parentComment.username,
+      replyingTo: parentComment.replyingTo,
     });
-    addReplyMutaion.mutate({
-      id: parentComment.id,
-      content: {
-        ...parentComment,
-        replies: [...parentComment.replies, newReply],
-      },
-    });
+    addReplyMutaion.mutate(newReply);
+  }
+
+  function updateComment(id, content) {
+    updateCommentMutaion.mutate({ id: id, content: content });
+  }
+
+  function updateReply(id, content) {
+    updateReplyMutaion.mutate({ id: id, content: content });
   }
 
   function deleteComment(id) {
-    deleteMutaion.mutate({ id: id });
+    deleteCommentMutaion.mutate({ id: id });
   }
 
-  function deleteReply(parentComment) {
-    deleteReplyMutaion.mutate({
-      id: parentComment.id,
-      content: {
-        ...parentComment,
-      },
-    });
-  }
-
-  function editReply(content, replyData, parentComment) {
-    const newReply = Object.assign(replyData, {
-      content: content,
-    });
-
-    updateReplyMutaion.mutate({
-      id: parentComment.id,
-      content: {
-        ...parentComment,
-        replies: [...parentComment.replies, newReply],
-      },
-    });
+  function deleteReply(id) {
+    deleteReplyMutaion.mutate({ id: id });
   }
 
   function showAlert(text) {
@@ -155,7 +137,7 @@ export default function Home() {
                 key={comment.id}
                 commentData={comment}
                 addReply={addReply}
-                editComment={updateComment}
+                updateComment={updateComment}
                 deleteComment={deleteComment}
                 parentId={comment.id}
               />
@@ -167,7 +149,7 @@ export default function Home() {
                       commentData={reply}
                       parentCommentData={comment}
                       deleteReply={deleteReply}
-                      editReply={editReply}
+                      updateReply={updateReply}
                     />
                   ))}
                 </ReplyWrapperStyled>

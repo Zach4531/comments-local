@@ -12,68 +12,34 @@
       "content": "Impressive! Though it seems the drag feature could be improved. But overall it looks incredible. You've nailed the design and the responsiveness at various breakpoints works really well.",
       "createdAt": "1 month ago",
       "score": 12,
-      "username": "amyrobson",
-      "replies": [
-        {
-          "id": 731,
-          "createdAt": "Feb 15, 2023",
-          "score": 0,
-          "replies": [],
-          "content": "sfgsfg",
-          "username": "juliusomo",
-          "replyingTo": "amyrobson"
-        }
-      ]
+      "username": "amyrobson"
     },
     {
-      "id": 2,
-      "content": "Woah, your project looks awesome! How long have you been coding for? I'm still new, but think I want to dive into React as well soon. Perhaps you can give me an insight on where I can learn React? Thanks!",
-      "createdAt": "2 weeks ago",
-      "score": 5,
-      "username": "maxblagun",
-      "replies": [
-        {
-          "id": 3,
-          "content": "If you're still new, I'd recommend focusing on the fundamentals of HTML, CSS, and JS before considering React. It's very tempting to jump ahead but lay a solid foundation first.g",
-          "createdAt": "1 week ago",
-          "score": 4,
-          "replyingTo": "maxblagun",
-          "username": "ramsesmiron"
-        },
-        {
-          "id": 4,
-          "content": "I couldn't agree more with this. Everything moves so fast and it always seems like everyone knows the newest library/framework. But the fundamentals are what stay constant.",
-          "createdAt": "2 days ago",
-          "score": 2,
-          "replyingTo": "ramsesmiron",
-          "username": "juliusomo"
-        },
-        {
-          "id": 585,
-          "createdAt": "Feb 15, 2023",
-          "score": 0,
-          "replies": [],
-          "content": "fgfdsg",
-          "username": "juliusomo",
-          "replyingTo": "maxblagun"
-        },
-        {
-          "id": 3,
-          "content": "If you're still new, I'd recommend focusing on the fundamentals of HTML, CSS, and JS before considering React. It's very tempting to jump ahead but lay a solid foundation first.g",
-          "createdAt": "1 week ago",
-          "score": 4,
-          "replyingTo": "maxblagun",
-          "username": "ramsesmiron"
-        }
-      ]
-    },
-    {
-      "id": 130,
-      "content": "asdsad",
-      "createdAt": "Feb 14, 2023",
+      "id": 21,
+      "createdAt": "Feb 19, 2023",
       "score": 0,
+      "content": "lkl",
+      "username": "juliusomo"
+    }
+  ],
+  "replies": [
+    {
+      "id": 603,
+      "createdAt": "Feb 19, 2023",
+      "score": 0,
+      "commentId": 1,
+      "content": "ert",
       "username": "juliusomo",
-      "replies": []
+      "replyingTo": "amyrobson"
+    },
+    {
+      "id": 26,
+      "createdAt": "Feb 19, 2023",
+      "score": 0,
+      "commentId": 1,
+      "content": "sdf",
+      "username": "juliusomo",
+      "replyingTo": "amyrobson"
     }
   ]
 }

@@ -12,8 +12,8 @@ export default function Comment({
   commentData,
   parentCommentData,
   addReply,
-  editComment,
-  editReply,
+  updateComment,
+  updateReply,
   deleteComment,
   deleteReply,
 }) {
@@ -30,36 +30,27 @@ export default function Comment({
 
   function deleteConfirmation(confirmation) {
     if (confirmation) {
-      deleteComment ? deleteComment(id) : handleDeleteReply();
+      deleteComment ? deleteComment(id) : deleteReply(id);
     } else {
       setModalOpen(false);
     }
   }
 
   function submitReply(content) {
-    addReply(content, commentData);
+    addReply(content, {
+      id: id,
+      replyingTo: username,
+    });
     setIsReplying(false);
   }
 
-  function submitCommentEdit(content) {
-    editComment(id, { ...commentData, content: content });
+  function submitCommentUpdate(content) {
+    updateComment(id, { content: content });
     setIsEditing(false);
   }
 
-  function handleDeleteReply() {
-    parentCommentData.replies = parentCommentData.replies.filter((reply) => {
-      return reply.id !== commentData.id;
-    });
-
-    deleteReply(parentCommentData);
-  }
-
-  function submitReplyEdit(content) {
-    parentCommentData.replies = parentCommentData.replies.filter((reply) => {
-      return reply.id !== commentData.id;
-    });
-
-    editReply(content, commentData, parentCommentData);
+  function submitReplyUpdate(content) {
+    updateReply(id, { content: content });
     setIsEditing(false);
   }
 
@@ -80,7 +71,9 @@ export default function Comment({
             <EditForm
               text={content}
               id={commentData.id}
-              onSubmission={editComment ? submitCommentEdit : submitReplyEdit}
+              onSubmission={
+                updateComment ? submitCommentUpdate : submitReplyUpdate
+              }
             />
           ) : (
             <CommentText>

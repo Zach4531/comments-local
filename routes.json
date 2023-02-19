@@ -1,0 +1,4 @@
+{
+  "/comments/:commentId/replies/:replyId": "/comments/:commentId/replies?id=:replyId",
+  "/all-comments": "/comments?_embed=replies"
+}
