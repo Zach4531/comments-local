@@ -54,10 +54,23 @@ export default function Comment({
     setIsEditing(false);
   }
 
+  function updateCommentCounter(content) {
+    updateComment(id, { score: content });
+  }
+
+  function updateReplyCounter(content) {
+    updateReply(id, { score: content });
+  }
+
   return (
     <>
       <CommentContainer>
-        <Counter score={score} />
+        <Counter
+          score={score}
+          updateCounter={
+            updateComment ? updateCommentCounter : updateReplyCounter
+          }
+        />
         <CommentContent>
           <CommentHeader
             username={username}

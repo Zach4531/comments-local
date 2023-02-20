@@ -1,14 +1,23 @@
 import styled from 'styled-components';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-export default function Counter({ score }) {
+export default function Counter({ score, updateCounter }) {
   const [count, setCount] = useState(score);
+  const [isMounted, setIsMounted] = useState(false);
 
   function adjustCount(amount) {
     setCount((current) => {
       return current + amount;
     });
   }
+
+  useEffect(() => {
+    if (isMounted) {
+      updateCounter(count);
+    } else {
+      setIsMounted(true);
+    }
+  }, [count]);
 
   return (
     <CounterStyled>

@@ -17,7 +17,7 @@
     {
       "id": 21,
       "createdAt": "Feb 19, 2023",
-      "score": 0,
+      "score": 2,
       "content": "lkl",
       "username": "juliusomo"
     }
@@ -26,16 +26,16 @@
     {
       "id": 603,
       "createdAt": "Feb 19, 2023",
-      "score": 0,
+      "score": 3,
       "commentId": 1,
-      "content": "ert",
+      "content": 0,
       "username": "juliusomo",
       "replyingTo": "amyrobson"
     },
     {
       "id": 26,
       "createdAt": "Feb 19, 2023",
-      "score": 0,
+      "score": 4,
       "commentId": 1,
       "content": "sdf",
       "username": "juliusomo",
